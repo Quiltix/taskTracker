@@ -3,6 +3,7 @@ package com.quiltix.taskTracker.service;
 import com.quiltix.taskTracker.model.User;
 import com.quiltix.taskTracker.model.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         try {
             User user = userRepository.findUserByUsername(username)
@@ -34,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
         }
         catch (UsernameNotFoundException e){
-            log.error("Не найдено user с почтой "+ username + e.getMessage());
+            log.error("Не найдено user с логином {} {}", username, e.getMessage());
             return null;
         }
 

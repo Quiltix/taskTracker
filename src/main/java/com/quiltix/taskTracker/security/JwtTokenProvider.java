@@ -4,34 +4,36 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
-
 
 @Component
 public class JwtTokenProvider {
-    private final String jwtSecret = "secretKey"; // Используйте надежное хранилище для ключа
-    private final long jwtExpirationInMs = 86400000;
+    private final SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512); // Генерируем безопасный ключ
+    private final long jwtExpirationInMs = 86400000; // 1 день
 
-
-    public String generateToken(Authentication authentication, String username ) {
+    public String generateToken(Authentication authentication) {
         Date now = new Date();
-
-        Date exiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        String username = authentication.getName();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(now)
-                .setExpiration(exiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(expiryDate)
+                .signWith(jwtSecret) // Исправлено
                 .compact();
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtSecret)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
@@ -39,7 +41,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
