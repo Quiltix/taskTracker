@@ -8,6 +8,7 @@ import lombok.Setter;
 public class JwtAuthenticationResponse {
     @Schema(description = "JWT токен", example = "eyJhbGciOiJIUzI1...")
     private String accessToken;
+    @Schema(description = "Тип аутентификации", example = "Bearer")
     private String tokenType = "Bearer";
 
     public JwtAuthenticationResponse(String accessToken) {
