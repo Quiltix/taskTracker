@@ -4,6 +4,7 @@ package com.quiltix.taskTracker.controller;
 
 import com.quiltix.taskTracker.DTO.JwtAuthenticationResponse;
 import com.quiltix.taskTracker.DTO.LoginRequest;
+import com.quiltix.taskTracker.DTO.MessageDTO;
 import com.quiltix.taskTracker.DTO.RegisterRequest;
 import com.quiltix.taskTracker.model.User;
 import com.quiltix.taskTracker.model.UserRepository;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,17 +34,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider tokenProvider;
-    private final PasswordEncoder passwordEncoder;
+
     private final UserService userService;
 
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
+    public AuthController(UserService userService) {
 
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
@@ -78,13 +75,13 @@ public class AuthController {
     public ResponseEntity <?> registerUser (@RequestBody RegisterRequest registerRequest){
         try {
             String message = userService.registerUser(registerRequest);
-            return ResponseEntity.ok().body(message);
+            return ResponseEntity.ok().body(new MessageDTO(message));
         }
         catch (IllegalArgumentException ex){
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         }
         catch (Exception ex){
-            return ResponseEntity.status(500).body(ex.getMessage());
+            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }
     }
 
@@ -123,9 +120,9 @@ public class AuthController {
             return ResponseEntity.ok().body(new JwtAuthenticationResponse(token));
         }
         catch (UsernameNotFoundException | IllegalArgumentException | BadCredentialsException ex){
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         } catch (Exception ex){
-            return ResponseEntity.status(500).body(ex.getMessage());
+            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }
 
     }
