@@ -27,8 +27,9 @@ public class Task {
 
     private LocalDateTime startTime;
 
-
-    private Long ownerId;
+    @ManyToOne()
+    @JoinColumn(name = "User_id")
+    private User owner;
 
     private boolean isComplete;
 

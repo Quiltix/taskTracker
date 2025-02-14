@@ -57,16 +57,7 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Пользователь с таким именем уже существует",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "User with this username is already exists")))
-
-    @ApiResponse(responseCode = "400", description = "Поле username не может быть пустым",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Username cannot be empty")))
-    @ApiResponse(responseCode = "400", description = "Поле password не может быть пустым",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Password cannot be empty")))
+                    schema = @Schema(type = "string",example = "User with this username is already exists | Username/Password cannot be empty ")))
     @ApiResponse(responseCode = "500", description = "Ошибка сервера",
             content = @Content(
                     mediaType = "application/json",
@@ -98,16 +89,7 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Логин или пароль пустой",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Username cannot be empty")))
-    @ApiResponse(responseCode = "400", description = "Логин или пароль пустой",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Password cannot be empty")))
-    @ApiResponse(responseCode = "400", description = "Неправильный пароль",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Invalid password")))
-
+                    schema = @Schema(type = "string",example = "Invalid password | Username/Password cannot be empty")))
     @ApiResponse(responseCode = "500", description = "Ошибка сервера",
             content = @Content(
                     mediaType = "application/json",

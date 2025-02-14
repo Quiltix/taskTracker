@@ -8,9 +8,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TaskDTO {
 
+public class CreateTaskDTO {
 
+    private String title;
 
+    private String description;
+
+    private LocalDateTime timeToComplete;
 
 }
