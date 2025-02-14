@@ -6,6 +6,7 @@ import com.quiltix.taskTracker.model.Task;
 import com.quiltix.taskTracker.model.User;
 import com.quiltix.taskTracker.model.UserRepository;
 import com.quiltix.taskTracker.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addTask(Authentication authentication, @RequestBody CreateTaskDTO) {
+    public ResponseEntity<?> addTask(Authentication authentication, @Valid @RequestBody CreateTaskDTO) {
         String username = authentication.getName();
 
         return ResponseEntity.ok().body("ad");
