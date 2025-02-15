@@ -27,6 +27,10 @@ public class Task {
 
     private LocalDateTime startTime;
 
+    @ManyToOne
+    @JoinColumn(name = "Category_id")
+    private Category category;
+
     @ManyToOne()
     @JoinColumn(name = "User_id")
     private User owner;
