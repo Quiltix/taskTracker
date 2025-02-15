@@ -3,6 +3,7 @@ package com.quiltix.taskTracker.DTO;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +20,15 @@ public class CreateTaskDTO {
     @NotBlank(message = "Description cannot be empty")
     private String description;
 
-    @NotBlank(message = "TimeToComplete cannot be empty")
-    @Future
+    @NotNull(message = "Important cannot be empty")
+    private Boolean important;
+
+
+
+    @NotNull(message = "TimeToComplete cannot be empty")
+    @Future(message = "Время завершения должно быть в будущем")
     private LocalDateTime timeToComplete;
+
+
 
 }

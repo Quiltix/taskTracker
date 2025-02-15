@@ -2,13 +2,10 @@ package com.quiltix.taskTracker.controller;
 
 
 
-import com.quiltix.taskTracker.DTO.JwtAuthenticationResponse;
-import com.quiltix.taskTracker.DTO.LoginRequest;
+import com.quiltix.taskTracker.DTO.JwtAuthenticationResponseDTO;
+import com.quiltix.taskTracker.DTO.LoginRequestDTO;
 import com.quiltix.taskTracker.DTO.MessageDTO;
-import com.quiltix.taskTracker.DTO.RegisterRequest;
-import com.quiltix.taskTracker.model.User;
-import com.quiltix.taskTracker.model.UserRepository;
-import com.quiltix.taskTracker.security.JwtTokenProvider;
+import com.quiltix.taskTracker.DTO.RegisterRequestDTO;
 import com.quiltix.taskTracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,17 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -64,9 +52,9 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/register")
-    public ResponseEntity <?> registerUser (@Valid @RequestBody RegisterRequest registerRequest){
+    public ResponseEntity <?> registerUser (@Valid @RequestBody RegisterRequestDTO registerRequestDTO){
         try {
-            String message = userService.registerUser(registerRequest);
+            String message = userService.registerUser(registerRequestDTO);
             return ResponseEntity.ok().body(new MessageDTO(message));
         }
         catch (Exception ex){
@@ -82,7 +70,7 @@ public class AuthController {
             responseCode = "200",description = "Успешная Аутентификация",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = JwtAuthenticationResponse.class)))
+                    schema = @Schema(implementation = JwtAuthenticationResponseDTO.class)))
 
     @ApiResponse(responseCode = "400", description = "Логин или пароль пустой",
             content = @Content(
@@ -93,15 +81,12 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
 
         try {
-            String token = userService.authenticateUser(loginRequest);
-            return ResponseEntity.ok().body(new JwtAuthenticationResponse(token));
-        }
-        catch (UsernameNotFoundException ex){
-            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
-        } catch (Exception ex){
+            String token = userService.authenticateUser(loginRequestDTO);
+            return ResponseEntity.ok().body(new JwtAuthenticationResponseDTO(token));
+        }catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }
 

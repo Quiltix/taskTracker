@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 
 public class Task {
     @Id
@@ -23,6 +23,14 @@ public class Task {
 
     private String description;
 
+    private Boolean important;
+    /*
+    Реализовать добавление таски
+    Категории
+    Реализовать решение таски
+    И удаление
+
+     */
     private LocalDateTime timeToComplete;
 
     private LocalDateTime startTime;
@@ -35,6 +43,6 @@ public class Task {
     @JoinColumn(name = "User_id")
     private User owner;
 
-    private boolean isComplete;
+    private Boolean complete;
 
 }

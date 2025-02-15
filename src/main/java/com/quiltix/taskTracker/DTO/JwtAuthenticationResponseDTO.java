@@ -2,16 +2,15 @@ package com.quiltix.taskTracker.DTO;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+
 @Schema(description = "Ответ с JWT")
-public class JwtAuthenticationResponse {
+public class JwtAuthenticationResponseDTO {
     @Schema(description = "JWT токен", example = "eyJhbGciOiJIUzI1...")
     private String accessToken;
     @Schema(description = "Тип аутентификации", example = "Bearer")
     private String tokenType = "Bearer";
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthenticationResponseDTO(String accessToken) {
         this.accessToken = accessToken;
     }
 

@@ -1,11 +1,10 @@
 package com.quiltix.taskTracker.service;
 
-import com.quiltix.taskTracker.DTO.LoginRequest;
-import com.quiltix.taskTracker.DTO.RegisterRequest;
+import com.quiltix.taskTracker.DTO.LoginRequestDTO;
+import com.quiltix.taskTracker.DTO.RegisterRequestDTO;
 import com.quiltix.taskTracker.model.User;
 import com.quiltix.taskTracker.model.UserRepository;
 import com.quiltix.taskTracker.security.JwtTokenProvider;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,25 +32,25 @@ public class UserService {
     }
 
     @Transactional
-    public String registerUser(RegisterRequest registerRequest) {
-        if (userRepository.findUserByUsername(registerRequest.getUsername()).isPresent()) {
+    public String registerUser(RegisterRequestDTO registerRequestDTO) {
+        if (userRepository.findUserByUsername(registerRequestDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("User with this username already exists");
         }
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setUsername(registerRequestDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         userRepository.save(user);
 
         return "The user has been successfully registered";
 
     }
 
-    public String authenticateUser(LoginRequest loginRequest) {
-        if(userRepository.findUserByUsername(loginRequest.getUsername()).isEmpty()){
+    public String authenticateUser(LoginRequestDTO loginRequestDTO) {
+        if(userRepository.findUserByUsername(loginRequestDTO.getUsername()).isEmpty()){
             throw new UsernameNotFoundException("User not found");
         }
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(authToken);

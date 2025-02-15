@@ -1,6 +1,7 @@
 package com.quiltix.taskTracker.service;
 
 
+import com.quiltix.taskTracker.DTO.CreateTaskDTO;
 import com.quiltix.taskTracker.model.Task;
 import com.quiltix.taskTracker.model.TaskRepository;
 import com.quiltix.taskTracker.model.User;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +29,27 @@ public class TaskService {
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
         return taskRepository.findByOwner(user);
+    }
+
+    public Task createTaks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
+        String username = authentication.getName();
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Task task = new Task().builder()
+                .title(taskDTO.getTitle())
+                .description(taskDTO.getDescription())
+                .important(taskDTO.getImportant())
+                .timeToComplete(taskDTO.getTimeToComplete())
+                .startTime(LocalDateTime.now())
+                .owner(user)
+                .complete(false)
+                .build();
+
+
+        return taskRepository.save(task);
+
+
     }
 
 
