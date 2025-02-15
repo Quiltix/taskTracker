@@ -47,12 +47,6 @@ public class UserService {
     }
 
     public String authenticateUser(LoginRequest loginRequest) {
-        if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        }
-        if (loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
         if(userRepository.findUserByUsername(loginRequest.getUsername()).isEmpty()){
             throw new UsernameNotFoundException("User not found");
         }

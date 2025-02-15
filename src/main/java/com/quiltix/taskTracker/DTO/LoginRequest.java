@@ -12,6 +12,6 @@ public class LoginRequest {
     @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 }
