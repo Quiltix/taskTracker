@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,13 +64,10 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/register")
-    public ResponseEntity <?> registerUser (@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity <?> registerUser (@Valid @RequestBody RegisterRequest registerRequest){
         try {
             String message = userService.registerUser(registerRequest);
             return ResponseEntity.ok().body(new MessageDTO(message));
-        }
-        catch (IllegalArgumentException ex){
-            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         }
         catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
@@ -89,19 +87,19 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Логин или пароль пустой",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(type = "string",example = "Invalid password | Username/Password cannot be empty")))
+                    schema = @Schema(type = "string",example = "Username/Password cannot be empty")))
     @ApiResponse(responseCode = "500", description = "Ошибка сервера",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
             String token = userService.authenticateUser(loginRequest);
             return ResponseEntity.ok().body(new JwtAuthenticationResponse(token));
         }
-        catch (UsernameNotFoundException | IllegalArgumentException | BadCredentialsException ex){
+        catch (UsernameNotFoundException ex){
             return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));

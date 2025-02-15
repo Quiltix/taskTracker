@@ -1,6 +1,7 @@
 package com.quiltix.taskTracker.DTO;
 
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,9 @@ import lombok.Setter;
 @Setter
 public class LoginRequest {
 
+    @NotBlank(message = "Username cannot be empty")
     private String username;
+
+    @NotBlank(message = "Username cannot be empty")
     private String password;
 }

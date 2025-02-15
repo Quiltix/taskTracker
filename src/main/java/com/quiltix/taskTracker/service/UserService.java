@@ -34,12 +34,6 @@ public class UserService {
 
     @Transactional
     public String registerUser(RegisterRequest registerRequest) {
-        if (registerRequest.getUsername() == null || registerRequest.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        }
-        if (registerRequest.getPassword() == null || registerRequest.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
         if (userRepository.findUserByUsername(registerRequest.getUsername()).isPresent()) {
             throw new IllegalArgumentException("User with this username already exists");
         }

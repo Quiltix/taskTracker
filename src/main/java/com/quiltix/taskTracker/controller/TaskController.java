@@ -30,7 +30,7 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addTask(Authentication authentication, @Valid @RequestBody CreateTaskDTO) {
+    public ResponseEntity<?> addTask(Authentication authentication) {
         String username = authentication.getName();
 
         return ResponseEntity.ok().body("ad");
