@@ -2,10 +2,10 @@ package com.quiltix.tasktracker.controller;
 
 
 
-import com.quiltix.tasktracker.DTO.JwtAuthenticationResponseDTO;
-import com.quiltix.tasktracker.DTO.LoginRequestDTO;
-import com.quiltix.tasktracker.DTO.MessageDTO;
-import com.quiltix.tasktracker.DTO.RegisterRequestDTO;
+import com.quiltix.tasktracker.DTO.Auth.JwtAuthenticationResponseDTO;
+import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
+import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

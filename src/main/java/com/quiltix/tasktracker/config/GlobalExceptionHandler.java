@@ -1,7 +1,7 @@
 package com.quiltix.tasktracker.config;
 
 
-import com.quiltix.tasktracker.DTO.MessageDTO;
+import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

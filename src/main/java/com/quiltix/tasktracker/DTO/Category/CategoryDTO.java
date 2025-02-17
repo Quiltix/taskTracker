@@ -1,9 +1,7 @@
-package com.quiltix.tasktracker.DTO;
+package com.quiltix.tasktracker.DTO.Category;
 
 
 import com.quiltix.tasktracker.model.Category;
-import com.quiltix.tasktracker.model.User;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

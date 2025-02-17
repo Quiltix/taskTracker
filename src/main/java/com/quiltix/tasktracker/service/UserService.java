@@ -1,7 +1,7 @@
 package com.quiltix.tasktracker.service;
 
-import com.quiltix.tasktracker.DTO.LoginRequestDTO;
-import com.quiltix.tasktracker.DTO.RegisterRequestDTO;
+import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
+import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;

@@ -1,18 +1,14 @@
 package com.quiltix.tasktracker.controller;
 
 
-import com.quiltix.tasktracker.DTO.CategoryDTO;
-import com.quiltix.tasktracker.DTO.CreateCategoryDTO;
-import com.quiltix.tasktracker.DTO.MessageDTO;
+import com.quiltix.tasktracker.DTO.Category.CategoryDTO;
+import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
+import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.model.Category;
-import com.quiltix.tasktracker.model.User;
-import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.service.CategoryService;
-import com.quiltix.tasktracker.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

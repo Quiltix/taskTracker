@@ -1,8 +1,8 @@
 package com.quiltix.tasktracker.controller;
 
-import com.quiltix.tasktracker.DTO.CreateTaskDTO;
-import com.quiltix.tasktracker.DTO.MessageDTO;
-import com.quiltix.tasktracker.DTO.TaskDTO;
+import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
+import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.DTO.Task.TaskDTO;
 import com.quiltix.tasktracker.model.Task;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.service.TaskService;

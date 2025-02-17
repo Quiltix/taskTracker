@@ -1,5 +1,5 @@
 
-package com.quiltix.tasktracker.DTO;
+package com.quiltix.tasktracker.DTO.Auth;
 
 
 import jakarta.validation.constraints.NotBlank;

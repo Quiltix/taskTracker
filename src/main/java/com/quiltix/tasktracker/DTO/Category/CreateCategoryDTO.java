@@ -1,4 +1,4 @@
-package com.quiltix.tasktracker.DTO;
+package com.quiltix.tasktracker.DTO.Category;
 
 
 import jakarta.validation.constraints.NotBlank;
