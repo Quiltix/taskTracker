@@ -1,11 +1,9 @@
-package com.quiltix.taskTracker.DTO;
+package com.quiltix.taskTracker.DTO.Task;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.quiltix.taskTracker.model.Category;
 import com.quiltix.taskTracker.model.Task;
-import com.quiltix.taskTracker.model.User;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

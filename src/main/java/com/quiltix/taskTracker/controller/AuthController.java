@@ -2,10 +2,10 @@ package com.quiltix.taskTracker.controller;
 
 
 
-import com.quiltix.taskTracker.DTO.JwtAuthenticationResponseDTO;
-import com.quiltix.taskTracker.DTO.LoginRequestDTO;
-import com.quiltix.taskTracker.DTO.MessageDTO;
-import com.quiltix.taskTracker.DTO.RegisterRequestDTO;
+import com.quiltix.taskTracker.DTO.Auth.JwtAuthenticationResponseDTO;
+import com.quiltix.taskTracker.DTO.Auth.LoginRequestDTO;
+import com.quiltix.taskTracker.DTO.Misc.MessageDTO;
+import com.quiltix.taskTracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.taskTracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 

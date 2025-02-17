@@ -1,4 +1,4 @@
-package com.quiltix.taskTracker.DTO;
+package com.quiltix.taskTracker.DTO.Auth;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

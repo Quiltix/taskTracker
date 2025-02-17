@@ -1,7 +1,7 @@
 package com.quiltix.taskTracker.service;
 
 
-import com.quiltix.taskTracker.DTO.CreateTaskDTO;
+import com.quiltix.taskTracker.DTO.Task.CreateTaskDTO;
 import com.quiltix.taskTracker.model.Task;
 import com.quiltix.taskTracker.model.TaskRepository;
 import com.quiltix.taskTracker.model.User;
@@ -31,7 +31,7 @@ public class TaskService {
         return taskRepository.findByOwner(user);
     }
 
-    public Task createTaks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
+    public Task createTakes(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

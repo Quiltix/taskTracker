@@ -1,4 +1,4 @@
-package com.quiltix.taskTracker.DTO;
+package com.quiltix.taskTracker.DTO.Misc;
 
 import lombok.Getter;
 import lombok.Setter;

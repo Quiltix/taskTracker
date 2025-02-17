@@ -1,4 +1,4 @@
-package com.quiltix.taskTracker.DTO;
+package com.quiltix.taskTracker.DTO.Task;
 
 
 import jakarta.validation.constraints.Future;

@@ -1,17 +1,15 @@
 package com.quiltix.taskTracker.controller;
 
-import com.quiltix.taskTracker.DTO.CreateTaskDTO;
-import com.quiltix.taskTracker.DTO.MessageDTO;
-import com.quiltix.taskTracker.DTO.TaskDTO;
+import com.quiltix.taskTracker.DTO.Task.CreateTaskDTO;
+import com.quiltix.taskTracker.DTO.Misc.MessageDTO;
+import com.quiltix.taskTracker.DTO.Task.TaskDTO;
 import com.quiltix.taskTracker.model.Task;
-import com.quiltix.taskTracker.model.User;
 import com.quiltix.taskTracker.model.UserRepository;
 import com.quiltix.taskTracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -24,12 +22,8 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    private final UserRepository userRepository;
-
-    public TaskController(TaskService taskService,
-                          UserRepository userRepository) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.userRepository = userRepository;
     }
 
 
@@ -39,7 +33,7 @@ public class TaskController {
     @PostMapping("/add")
     public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO) {
         try{
-            Task task = taskService.createTaks(authentication,taskDTO);
+            Task task = taskService.createTakes(authentication,taskDTO);
             return ResponseEntity.ok().body(new TaskDTO(task));
         }
         catch (Exception e){
@@ -47,6 +41,10 @@ public class TaskController {
         }
     }
 
+    @Operation(summary = "Получение всех задач")
+    @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
+    @ApiResponse(responseCode = "400", description = "Некорректные данные")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
     @GetMapping("/all")
     public ResponseEntity<?> getAllTasksByToken(Authentication authentication) {
        try {
