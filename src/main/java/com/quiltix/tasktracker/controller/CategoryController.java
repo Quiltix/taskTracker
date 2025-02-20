@@ -48,6 +48,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "401", description = "Нет прав на удаление")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> addCategory(Authentication authentication, @PathVariable long id){
         try {
