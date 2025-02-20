@@ -72,9 +72,23 @@ public class TaskController {
         try{
             taskService.deleteTask(authentication,taskId);
             return ResponseEntity.ok().body(new MessageDTO("Task deleted successfully"));
-        } catch (EntityNotFoundException e ){
-            return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
-        } catch (Exception e){
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @Operation(summary = "Решение таски")
+    @ApiResponse(responseCode = "200", description = "Задача решена")
+    @ApiResponse(responseCode = "400", description = "Нет задачи с таким id")
+    @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
+    @ApiResponse(responseCode = "500", description = "Server error")
+
+    @PutMapping("/{taskId}/complete")
+    public ResponseEntity<?> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
+        try{
+            taskService.markTaskAsComplete(taskId,authentication);
+            return ResponseEntity.ok().body(new MessageDTO("Task completed successfully"));
+        }catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
         }
     }

@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.config;
 
 
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,11 +21,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleValidationUserException(UsernameNotFoundException ex){
+    public ResponseEntity<?> handleUserNotFoundExceptions(UsernameNotFoundException ex){
         return ResponseEntity.badRequest().body(new MessageDTO("User not found"));
     }
+
+
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<?> handleValidationUserException(AccessDeniedException ex){
+    public ResponseEntity<?> handleAccessDeniedExceptions(AccessDeniedException ex){
         return ResponseEntity.status(401).body(new MessageDTO(ex.getMessage()));
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundExceptions(EntityNotFoundException ex){
+        return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 }

@@ -64,5 +64,19 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
+    public Task markTaskAsComplete(Long taskId, Authentication authentication){
+        String username = authentication.getName();
+
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new EntityNotFoundException("Task not found"));
+
+        if (!task.getOwner().getUsername().equals(username)) {
+            throw new AccessDeniedException("You are not authorized to complete this task");
+        }
+
+        task.setComplete(true);
+
+        return taskRepository.save(task);
+    }
+
 
 }
