@@ -8,6 +8,7 @@ import com.quiltix.tasktracker.model.Category;
 import com.quiltix.tasktracker.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,14 +32,15 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "Категория успешно добавлена")
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<?> addCategory(Authentication authentication, @Valid @RequestBody CreateCategoryDTO categoryDTO){
         try {
             Category category = categoryService.addCategory(authentication,categoryDTO);
             return ResponseEntity.ok().body(new CategoryDTO(category));
+        }catch (EntityExistsException ex){
+            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-
         }
     }
 }
