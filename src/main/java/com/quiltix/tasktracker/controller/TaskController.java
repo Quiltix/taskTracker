@@ -74,12 +74,7 @@ public class TaskController {
             return ResponseEntity.ok().body(new MessageDTO("Task deleted successfully"));
         } catch (EntityNotFoundException e ){
             return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
-        }
-        catch (AccessDeniedException e ){
-            return ResponseEntity.status(401).body(new MessageDTO(e.getMessage()));
-        }
-
-        catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
         }
     }
