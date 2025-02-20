@@ -6,6 +6,8 @@ import com.quiltix.tasktracker.model.Task;
 import com.quiltix.tasktracker.model.TaskRepository;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -48,8 +50,18 @@ public class TaskService {
 
 
         return taskRepository.save(task);
+    }
 
+    public void deleteTask(Authentication authentication, Long taskId){
+        String username = authentication.getName();
 
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new EntityNotFoundException("Task not found"));
+
+        if(!task.getOwner().getUsername().equals(username)){
+            throw new AccessDeniedException("You are not authorized to delete this task");
+        }
+
+        taskRepository.delete(task);
     }
 
 

@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleValidationUserException(MethodArgumentNotValidException ex){
+    public ResponseEntity<?> handleValidationUserException(UsernameNotFoundException ex){
         return ResponseEntity.badRequest().body(new MessageDTO("User not found"));
     }
 }

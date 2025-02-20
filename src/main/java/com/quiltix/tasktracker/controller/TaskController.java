@@ -8,8 +8,10 @@ import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -34,7 +36,7 @@ public class TaskController {
     @Operation(summary = "Добавление новой задачи")
     @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO) {
         try{
             Task task = taskService.createTaks(authentication,taskDTO);
@@ -45,8 +47,8 @@ public class TaskController {
         }
     }
 
-    @Operation(summary = "Добавление новой задачи")
-    @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
+    @Operation(summary = "Получение всех задач")
+    @ApiResponse(responseCode = "200", description = "Задачи получены")
     @ApiResponse(responseCode = "400", description = "User not found")
     @ApiResponse(responseCode = "500", description = "Server error")
 
@@ -58,6 +60,28 @@ public class TaskController {
        } catch (Exception ex){
            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
        }
+    }
+
+    @Operation(summary = "Удаление задачи")
+    @ApiResponse(responseCode = "200", description = "Задача удалена")
+    @ApiResponse(responseCode = "400", description = "Нет задачи с таким id")
+    @ApiResponse(responseCode = "401", description = "Нет прав на удаление")
+    @ApiResponse(responseCode = "500", description = "Server error")
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<?> deleteTask(Authentication authentication,@Valid @PathVariable long taskId) {
+        try{
+            taskService.deleteTask(authentication,taskId);
+            return ResponseEntity.ok().body(new MessageDTO("Task deleted successfully"));
+        } catch (EntityNotFoundException e ){
+            return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+        }
+        catch (AccessDeniedException e ){
+            return ResponseEntity.status(401).body(new MessageDTO(e.getMessage()));
+        }
+
+        catch (Exception e){
+            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
+        }
     }
 }
 
