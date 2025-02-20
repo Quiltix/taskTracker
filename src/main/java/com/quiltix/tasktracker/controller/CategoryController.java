@@ -12,10 +12,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/task/category")
@@ -32,6 +29,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "Категория успешно добавлена")
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+
     @PostMapping()
     public ResponseEntity<?> addCategory(Authentication authentication, @Valid @RequestBody CreateCategoryDTO categoryDTO){
         try {
@@ -39,6 +37,22 @@ public class CategoryController {
             return ResponseEntity.ok().body(new CategoryDTO(category));
         }catch (EntityExistsException ex){
             return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
+        } catch (Exception ex){
+            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
+        }
+    }
+
+    @Operation(summary = "Удаление категории")
+    @ApiResponse(responseCode = "200", description = "Успешное удаление")
+    @ApiResponse(responseCode = "400", description = "Нет такой категории")
+    @ApiResponse(responseCode = "401", description = "Нет прав на удаление")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> addCategory(Authentication authentication, @PathVariable long id){
+        try {
+            categoryService.deleteCategory(authentication,id);
+            return ResponseEntity.ok().body(new MessageDTO("Category deleted successfully"));
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }

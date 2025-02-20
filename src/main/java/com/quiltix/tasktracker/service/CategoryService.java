@@ -7,6 +7,8 @@ import com.quiltix.tasktracker.model.CategoryRepository;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -35,5 +37,16 @@ public class CategoryService {
     }
 
 
-    public void deleteCategory()
+    public void deleteCategory(Authentication authentication,Long categoryId){
+
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        String username = authentication.getName();
+
+        if (category.getOwner()== null || ! category.getOwner().getUsername().equals(username)){
+            throw  new AccessDeniedException("You are not authorized to delete this category");
+        }
+
+        categoryRepository.delete(category);
+    }
 }
