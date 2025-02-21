@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.controller;
 
 
 import com.quiltix.tasktracker.DTO.Category.CategoryDTO;
+import com.quiltix.tasktracker.DTO.Category.ChangeCategoryDTO;
 import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.model.Category;
@@ -54,6 +55,23 @@ public class CategoryController {
         try {
             categoryService.deleteCategory(authentication,id);
             return ResponseEntity.ok().body(new MessageDTO("Category deleted successfully"));
+        } catch (Exception ex){
+            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
+        }
+    }
+
+    @Operation(summary = "Изменение названия категории")
+    @ApiResponse(responseCode = "200", description = "Успешное изменение")
+    @ApiResponse(responseCode = "400", description = "Нет такой категории")
+    @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+
+
+    @PutMapping
+    public ResponseEntity<?> changeCategory(Authentication authentication, @RequestBody @Valid ChangeCategoryDTO changeCategoryDTO){
+        try {
+            Category category = categoryService.changeCategoryName(authentication, changeCategoryDTO.getId(), changeCategoryDTO.getNewName());
+            return ResponseEntity.ok().body(new CategoryDTO(category));
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }

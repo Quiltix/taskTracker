@@ -49,4 +49,18 @@ public class CategoryService {
 
         categoryRepository.delete(category);
     }
+
+    public Category changeCategoryName(Authentication authentication, Long categoryId, String newName){
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        String username = authentication.getName();
+
+        if (category.getOwner()== null || ! category.getOwner().getUsername().equals(username)){
+            throw  new AccessDeniedException("You are not authorized to change this category");
+        }
+        category.setName(newName);
+
+        return categoryRepository.save(category);
+
+    }
 }
