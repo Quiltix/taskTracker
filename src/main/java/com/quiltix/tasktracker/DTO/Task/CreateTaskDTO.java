@@ -28,6 +28,7 @@ public class CreateTaskDTO {
     private Boolean important;
 
 
+    private Long categoryId;
 
     @NotNull(message = "TimeToComplete cannot be empty")
     @Future(message = "Время завершения должно быть в будущем")

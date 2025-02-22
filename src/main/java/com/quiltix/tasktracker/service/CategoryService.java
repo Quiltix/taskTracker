@@ -2,16 +2,15 @@ package com.quiltix.tasktracker.service;
 
 
 import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
-import com.quiltix.tasktracker.model.Category;
-import com.quiltix.tasktracker.model.CategoryRepository;
-import com.quiltix.tasktracker.model.User;
-import com.quiltix.tasktracker.model.UserRepository;
+import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -61,6 +60,12 @@ public class CategoryService {
         category.setName(newName);
 
         return categoryRepository.save(category);
+    }
 
+    public List<Category> getAllCategories(Authentication authentication){
+        String username = authentication.getName();
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        return categoryRepository.findByOwner(user);
     }
 }

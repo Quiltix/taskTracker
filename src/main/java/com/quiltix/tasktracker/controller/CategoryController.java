@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Tag(name = "Category Controller")
 @RequestMapping("api/task/category")
@@ -74,6 +76,22 @@ public class CategoryController {
         try {
             Category category = categoryService.changeCategoryName(authentication, changeCategoryDTO.getId(), changeCategoryDTO.getNewName());
             return ResponseEntity.ok().body(new CategoryDTO(category));
+        } catch (Exception ex){
+            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
+        }
+    }
+
+    @Operation(summary = "Получение всех категорий")
+    @ApiResponse(responseCode = "200", description = "Список категорий")
+    @ApiResponse(responseCode = "400", description = "Нет такого пользователя")
+    @ApiResponse(responseCode = "401", description = "Нет прав на чтение")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+
+    @GetMapping
+    public ResponseEntity<?> getAllCategories(Authentication authentication){
+        try {
+            List<Category> categories = categoryService.getAllCategories(authentication);
+            return ResponseEntity.ok().body(categories);
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }

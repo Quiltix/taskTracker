@@ -1,6 +1,7 @@
 package com.quiltix.tasktracker.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -20,6 +21,7 @@ public class Category {
     private String name;
 
     @ManyToOne()
+    @JsonIgnore
     @JoinColumn(name = "User_id")
     private User owner;
 

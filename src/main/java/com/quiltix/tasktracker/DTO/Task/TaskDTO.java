@@ -29,7 +29,9 @@ public class TaskDTO {
     }
 
     private Long id;
+
     private String title;
+
     private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
@@ -37,8 +39,11 @@ public class TaskDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime startTime;
+
     private Category category;
+
     private boolean important;
+
     private boolean complete;
 
 

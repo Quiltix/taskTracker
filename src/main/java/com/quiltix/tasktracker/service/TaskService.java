@@ -2,10 +2,7 @@ package com.quiltix.tasktracker.service;
 
 
 import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
-import com.quiltix.tasktracker.model.Task;
-import com.quiltix.tasktracker.model.TaskRepository;
-import com.quiltix.tasktracker.model.User;
-import com.quiltix.tasktracker.model.UserRepository;
+import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -20,10 +17,12 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Task> getAllTasks(Authentication authentication){
@@ -37,18 +36,23 @@ public class TaskService {
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        Task task = Task.builder()
+        Task.TaskBuilder taskBuilder = Task.builder()
                 .title(taskDTO.getTitle())
                 .description(taskDTO.getDescription())
                 .important(taskDTO.getImportant())
                 .timeToComplete(taskDTO.getTimeToComplete())
                 .startTime(LocalDateTime.now())
                 .owner(user)
-                .complete(false)
-                .build();
+                .complete(false);
 
 
+        if (taskDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(taskDTO.getCategoryId())
+                    .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+            taskBuilder.category(category);
+        }
+
+        Task task = taskBuilder.build();
         return taskRepository.save(task);
     }
 
