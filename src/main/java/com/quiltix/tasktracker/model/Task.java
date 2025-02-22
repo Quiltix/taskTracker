@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(min = 3, message = "Title must be at least 3 characters long")
     private String title;
 
     private String description;

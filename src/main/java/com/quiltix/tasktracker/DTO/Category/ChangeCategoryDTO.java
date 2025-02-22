@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.DTO.Category;
 
 import com.quiltix.tasktracker.model.Category;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChangeCategoryDTO {
+
     @NotBlank(message = "Id of category cannot be empty")
     private Long id;
+
+    @Size(min = 3, message = "name must be at least 3 characters long")
     @NotBlank(message = "Name of category cannot be empty")
     private String newName;
 }

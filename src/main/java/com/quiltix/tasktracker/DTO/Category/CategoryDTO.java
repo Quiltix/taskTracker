@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.DTO.Category;
 
 
 import com.quiltix.tasktracker.model.Category;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ public class CategoryDTO {
 
     private Long id;
 
+    @Size(min = 3, message = "name must be at least 3 characters long")
     private String name;
 
     public CategoryDTO(Category category) {

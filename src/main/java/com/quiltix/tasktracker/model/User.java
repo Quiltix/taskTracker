@@ -4,6 +4,7 @@ package com.quiltix.tasktracker.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,10 +20,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(min = 4, message = "Username must be at least 4 characters long")
     @Column(unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
+    @Size(min = 7, message = "Password must be at least 7 characters long")
     @Column(nullable = false)
     private String password;
 }

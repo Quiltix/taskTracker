@@ -8,6 +8,7 @@ import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @RestController
+@Tag(name = "Task Controller")
 @RequestMapping("api/task")
 public class TaskController {
 
