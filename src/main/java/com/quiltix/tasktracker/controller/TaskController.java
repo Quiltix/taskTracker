@@ -88,8 +88,8 @@ public class TaskController {
     @PutMapping("/{taskId}/complete")
     public ResponseEntity<?> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
         try{
-            taskService.markTaskAsComplete(taskId,authentication);
-            return ResponseEntity.ok().body(new MessageDTO("Task completed successfully"));
+            Task task =  taskService.markTaskAsComplete(taskId,authentication);
+            return ResponseEntity.ok().body(new TaskDTO(task));
         }catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
         }
