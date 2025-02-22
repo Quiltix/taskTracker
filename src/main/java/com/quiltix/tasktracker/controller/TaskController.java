@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.controller;
 
 import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.TaskDTO;
 import com.quiltix.tasktracker.model.Task;
 import com.quiltix.tasktracker.model.UserRepository;
@@ -26,12 +27,9 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    private final UserRepository userRepository;
-
-    public TaskController(TaskService taskService,
-                          UserRepository userRepository) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.userRepository = userRepository;
+
     }
 
 
@@ -41,7 +39,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO) {
         try{
-            Task task = taskService.createTaks(authentication,taskDTO);
+            Task task = taskService.createTasks(authentication,taskDTO);
             return ResponseEntity.ok().body(new TaskDTO(task));
         }
         catch (Exception e){
@@ -89,6 +87,16 @@ public class TaskController {
     public ResponseEntity<?> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
         try{
             Task task =  taskService.markTaskAsComplete(taskId,authentication);
+            return ResponseEntity.ok().body(new TaskDTO(task));
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @RequestBody EditTaskDTO editTaskDTO) {
+        try{
+            Task task =  taskService.editTask(authentication,id,editTaskDTO);
             return ResponseEntity.ok().body(new TaskDTO(task));
         }catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));

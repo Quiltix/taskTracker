@@ -3,6 +3,7 @@ package com.quiltix.tasktracker.DTO.Task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.quiltix.tasktracker.model.Category;
+import jakarta.validation.constraints.Future;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,15 +13,15 @@ import java.time.LocalDateTime;
 @Setter
 public class EditTaskDTO {
 
-
     private String title;
 
     private String description;
 
-    private boolean important;
+    private Boolean important;
 
-    private Category category;
+    private Long categoryId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @Future(message = "Time must be in future")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeToComplete;
 }

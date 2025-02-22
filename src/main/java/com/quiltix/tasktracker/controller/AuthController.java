@@ -55,6 +55,8 @@ public class AuthController {
         try {
             String message = userService.registerUser(registerRequestDTO);
             return ResponseEntity.ok().body(new MessageDTO(message));
+        }catch (IllegalArgumentException ex){
+            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
         }
         catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));

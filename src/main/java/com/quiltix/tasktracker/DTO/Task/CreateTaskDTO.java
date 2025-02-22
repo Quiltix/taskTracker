@@ -3,6 +3,7 @@ package com.quiltix.tasktracker.DTO.Task;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +32,8 @@ public class CreateTaskDTO {
     private Long categoryId;
 
     @NotNull(message = "TimeToComplete cannot be empty")
-    @Future(message = "Время завершения должно быть в будущем")
+    @Future(message = "Time must be in future")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime timeToComplete;
 
 

@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.service;
 
 
 import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
+import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,7 +33,7 @@ public class TaskService {
         return taskRepository.findByOwner(user);
     }
 
-    public Task createTaks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
+    public Task createTasks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -78,6 +79,34 @@ public class TaskService {
         }
 
         task.setComplete(true);
+
+        return taskRepository.save(task);
+    }
+
+    public Task editTask(Authentication authentication, long id, EditTaskDTO editTaskDTO){
+        String username = authentication.getName();
+
+        Task task = taskRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Task not found"));
+
+        if (!task.getOwner().getUsername().equals(username)) {
+            throw new AccessDeniedException("You are not authorized to complete this task");
+        }
+
+        if (editTaskDTO.getTitle() != null) {
+            task.setTitle(editTaskDTO.getTitle());
+        }
+        if (editTaskDTO.getDescription() != null) {
+            task.setDescription(editTaskDTO.getDescription());
+        }
+        if (editTaskDTO.getTimeToComplete() != null) {
+            task.setTimeToComplete(editTaskDTO.getTimeToComplete());
+        }
+        if (editTaskDTO.getCategoryId() != null && categoryRepository.existsById(editTaskDTO.getCategoryId())) {
+            task.setCategory(categoryRepository.findById(editTaskDTO.getCategoryId()).orElseThrow(()-> new EntityNotFoundException("Category not found")));
+        }
+        if (editTaskDTO.getImportant() != null) {
+            task.setImportant(editTaskDTO.getImportant());
+        }
 
         return taskRepository.save(task);
     }
