@@ -23,12 +23,7 @@ public class Task {
     private String description;
 
     private Boolean important;
-    /*
-    Категории
-    Реализовать решение таски
-    И удаление
 
-     */
     private LocalDateTime timeToComplete;
 
     private LocalDateTime startTime;

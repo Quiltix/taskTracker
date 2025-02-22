@@ -76,4 +76,6 @@ public class CategoryController {
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }
     }
+
+
 }
