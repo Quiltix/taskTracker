@@ -93,6 +93,12 @@ public class TaskController {
         }
     }
 
+    @Operation(summary = "Изменение таски")
+    @ApiResponse(responseCode = "200", description = "Задача изменена")
+    @ApiResponse(responseCode = "400", description = "Нет задачи с таким id")
+    @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
+    @ApiResponse(responseCode = "500", description = "Server error")
+
     @PutMapping("/{id}")
     public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @RequestBody EditTaskDTO editTaskDTO) {
         try{

@@ -33,7 +33,7 @@ public class CreateTaskDTO {
 
     @NotNull(message = "TimeToComplete cannot be empty")
     @Future(message = "Time must be in future")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timeToComplete;
 
 

@@ -22,6 +22,6 @@ public class EditTaskDTO {
     private Long categoryId;
 
     @Future(message = "Time must be in future")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timeToComplete;
 }
