@@ -55,7 +55,7 @@ public class TaskController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllTasksByToken(Authentication authentication) {
        try {
-           List<Task> tasks= taskService.getAllTasks(authentication);
+           List<TaskDTO> tasks= taskService.getAllTasks(authentication);
            return ResponseEntity.ok().body(tasks);
        } catch (Exception ex){
            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
@@ -117,7 +117,7 @@ public class TaskController {
     @GetMapping("/by-category")
     public ResponseEntity<?> filterByCategory(Authentication authentication, @RequestParam long id) {
         try{
-            List<Task> tasks =  taskService.getTaskByCategory(authentication,id);
+            List<TaskDTO> tasks =  taskService.getTaskByCategory(authentication,id);
             return ResponseEntity.ok().body(tasks);
         }catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));

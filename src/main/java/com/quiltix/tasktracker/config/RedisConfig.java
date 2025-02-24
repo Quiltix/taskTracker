@@ -34,7 +34,7 @@ public class RedisConfig {
         cacheConfigurationMap.put("allTasks", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
         cacheConfigurationMap.put("tasksByCategory", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
 
-        return RedisCacheManager.builder()
+        return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultCacheConfig)
                 .withInitialCacheConfigurations(cacheConfigurationMap)
                 .build();

@@ -90,7 +90,6 @@ public class AuthController {
         }catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
         }
-
     }
 
 }

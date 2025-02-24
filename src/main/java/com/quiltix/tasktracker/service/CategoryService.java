@@ -1,10 +1,12 @@
 package com.quiltix.tasktracker.service;
 
 
+import com.quiltix.tasktracker.DTO.Category.CategoryDTO;
 import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -62,10 +64,11 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public List<Category> getAllCategories(Authentication authentication){
+    @Cacheable(value = "categories")
+    public List<CategoryDTO> getAllCategories(Authentication authentication){
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
-        return categoryRepository.findByOwner(user);
+        return categoryRepository.findByOwner(user).stream().map(CategoryDTO::new).toList();
     }
 }

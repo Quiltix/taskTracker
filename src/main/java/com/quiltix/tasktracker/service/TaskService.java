@@ -3,9 +3,10 @@ package com.quiltix.tasktracker.service;
 
 import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
+import com.quiltix.tasktracker.DTO.Task.TaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,21 +22,18 @@ public class TaskService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    private final UndertowServletWebServerFactory undertowServletWebServerFactory;
-
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository,
-                       UndertowServletWebServerFactory undertowServletWebServerFactory) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
-        this.undertowServletWebServerFactory = undertowServletWebServerFactory;
     }
 
-    public List<Task> getAllTasks(Authentication authentication){
+    @Cacheable(value = "allTasks",key = "#authentication.name")
+    public List<TaskDTO> getAllTasks(Authentication authentication){
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
-        return taskRepository.findByOwner(user);
+        return taskRepository.findByOwner(user).stream().map(TaskDTO::new).toList();
     }
 
     public Task createTasks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
@@ -115,8 +113,9 @@ public class TaskService {
 
         return taskRepository.save(task);
     }
-    
-    public List<Task> getTaskByCategory(Authentication authentication, Long categoryId){
+
+    @Cacheable(value = "tasksByCategory",key = "#authentication.name + ':' + #categoryId")
+    public List<TaskDTO> getTaskByCategory(Authentication authentication, Long categoryId){
 
         String username = authentication.getName();
 
@@ -125,6 +124,6 @@ public class TaskService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
-        return taskRepository.findByOwnerAndCategory(user,category);
+        return taskRepository.findByOwnerAndCategory(user,category).stream().map(TaskDTO::new).toList();
     }
 }

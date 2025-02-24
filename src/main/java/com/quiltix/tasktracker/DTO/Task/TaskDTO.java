@@ -10,17 +10,18 @@ import com.quiltix.tasktracker.model.Task;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TaskDTO {
+public class TaskDTO implements Serializable {
 
 
     public TaskDTO(Task task) {
         complete = task.getComplete();
         important = task.getImportant();
-        category = task.getCategory();
+        category = task.getCategory().getId();
         startTime = task.getStartTime();
         timeToComplete = task.getTimeToComplete();
         description = task.getDescription();
@@ -40,7 +41,7 @@ public class TaskDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime startTime;
 
-    private Category category;
+    private Long category;
 
     private boolean important;
 

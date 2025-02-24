@@ -90,7 +90,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> getAllCategories(Authentication authentication){
         try {
-            List<Category> categories = categoryService.getAllCategories(authentication);
+            List<CategoryDTO> categories = categoryService.getAllCategories(authentication);
             return ResponseEntity.ok().body(categories);
         } catch (Exception ex){
             return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
