@@ -5,6 +5,7 @@ import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,10 +21,14 @@ public class TaskService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+    private final UndertowServletWebServerFactory undertowServletWebServerFactory;
+
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository,
+                       UndertowServletWebServerFactory undertowServletWebServerFactory) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.undertowServletWebServerFactory = undertowServletWebServerFactory;
     }
 
     public List<Task> getAllTasks(Authentication authentication){
@@ -109,5 +114,17 @@ public class TaskService {
         }
 
         return taskRepository.save(task);
+    }
+    
+    public List<Task> getTaskByCategory(Authentication authentication, Long categoryId){
+
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("user not found"));
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        return taskRepository.findByOwnerAndCategory(user,category);
     }
 }

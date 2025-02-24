@@ -8,4 +8,6 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> findByOwner(User owner);
 
+    List<Task> findByOwnerAndCategory(User owner, Category category);
+
 }

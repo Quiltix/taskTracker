@@ -109,6 +109,20 @@ public class TaskController {
         }
     }
 
+    @Operation(summary = "Получение таск по категории ")
+    @ApiResponse(responseCode = "200", description = "Задачи получены")
+    @ApiResponse(responseCode = "400", description = "Нет такой категории")
+    @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
+    @ApiResponse(responseCode = "500", description = "Server error")
+    @GetMapping("/by-category/{id}")
+    public ResponseEntity<?> filterByCategory(Authentication authentication, @PathVariable long id) {
+        try{
+            List<Task> tasks =  taskService.getTaskByCategory(authentication,id);
+            return ResponseEntity.ok().body(tasks);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
+        }
+    }
 
 }
 
