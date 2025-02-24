@@ -15,6 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 
+@Table(
+        indexes = {
+                @Index( name = "idx_owner", columnList = "User_id"),
+                @Index(name = "idx_category", columnList = "category_id"),
+        }
+)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
