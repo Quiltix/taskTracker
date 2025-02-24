@@ -114,8 +114,8 @@ public class TaskController {
     @ApiResponse(responseCode = "400", description = "Нет такой категории")
     @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
     @ApiResponse(responseCode = "500", description = "Server error")
-    @GetMapping("/by-category/{id}")
-    public ResponseEntity<?> filterByCategory(Authentication authentication, @PathVariable long id) {
+    @GetMapping("/by-category")
+    public ResponseEntity<?> filterByCategory(Authentication authentication, @RequestParam long id) {
         try{
             List<Task> tasks =  taskService.getTaskByCategory(authentication,id);
             return ResponseEntity.ok().body(tasks);
