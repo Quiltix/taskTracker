@@ -6,6 +6,7 @@ import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ public class CategoryService {
         this.userRepository = userRepository;
     }
 
+    @CacheEvict(value = "categories", allEntries = true)
     public Category addCategory(Authentication authentication, CreateCategoryDTO categoryDTO){
         User user = userRepository.findUserByUsername(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (categoryRepository.existsByNameAndOwner(categoryDTO.getName(),user)){
@@ -38,6 +40,7 @@ public class CategoryService {
     }
 
 
+    @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Authentication authentication,Long categoryId){
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
@@ -51,6 +54,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
+    @CacheEvict(value = "categories", allEntries = true)
     public Category changeCategoryName(Authentication authentication, Long categoryId, String newName){
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
 

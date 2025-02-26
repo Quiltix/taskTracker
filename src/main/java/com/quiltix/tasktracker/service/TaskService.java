@@ -6,6 +6,7 @@ import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.TaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class TaskService {
         return taskRepository.findByOwner(user).stream().map(TaskDTO::new).toList();
     }
 
+    @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
     public Task createTasks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username)
@@ -47,7 +49,7 @@ public class TaskService {
                 .timeToComplete(taskDTO.getTimeToComplete())
                 .startTime(LocalDateTime.now())
                 .owner(user)
-                .complete(false);
+                .status(StatusEnum.CREATED);
 
 
         if (taskDTO.getCategoryId() != null) {
@@ -60,6 +62,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
     public void deleteTask(Authentication authentication, Long taskId){
         String username = authentication.getName();
 
@@ -72,6 +75,7 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
+    @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
     public Task markTaskAsComplete(Long taskId, Authentication authentication){
         String username = authentication.getName();
 
@@ -81,11 +85,12 @@ public class TaskService {
             throw new AccessDeniedException("You are not authorized to complete this task");
         }
 
-        task.setComplete(true);
+        task.setStatus(StatusEnum.COMPLETED);
 
         return taskRepository.save(task);
     }
 
+    @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
     public Task editTask(Authentication authentication, long id, EditTaskDTO editTaskDTO){
         String username = authentication.getName();
 
