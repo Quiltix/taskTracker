@@ -22,7 +22,6 @@ public class CreateTaskDTO {
     @NotBlank(message = "Title cannot be empty")
     private String title;
 
-    @NotBlank(message = "Description cannot be empty")
     private String description;
 
     @NotNull(message = "Important cannot be empty")

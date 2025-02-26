@@ -92,7 +92,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @RequestBody EditTaskDTO editTaskDTO) {
+    public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @Valid @RequestBody EditTaskDTO editTaskDTO) {
 
         Task task =  taskService.editTask(authentication,id,editTaskDTO);
 

@@ -109,7 +109,7 @@ public class TaskService {
         if (editTaskDTO.getTimeToComplete() != null) {
             task.setTimeToComplete(editTaskDTO.getTimeToComplete());
         }
-        if (editTaskDTO.getCategoryId() != null && categoryRepository.existsById(editTaskDTO.getCategoryId())) {
+        if (editTaskDTO.getCategoryId() != null ) {
             task.setCategory(categoryRepository.findById(editTaskDTO.getCategoryId()).orElseThrow(()-> new EntityNotFoundException("Category not found")));
         }
         if (editTaskDTO.getImportant() != null) {

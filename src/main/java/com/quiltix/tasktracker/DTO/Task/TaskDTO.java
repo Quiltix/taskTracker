@@ -8,6 +8,7 @@ import com.quiltix.tasktracker.model.StatusEnum;
 import com.quiltix.tasktracker.model.Task;
 
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,7 @@ public class TaskDTO implements Serializable {
 
     private Long id;
 
+    @Size(min = 3, message = "Title must be at least 3 characters long")
     private String title;
 
     private String description;
