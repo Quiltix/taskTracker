@@ -36,7 +36,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
 
     @PostMapping()
-    public ResponseEntity<?> addCategory(Authentication authentication, @Valid @RequestBody CreateCategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> addCategory(Authentication authentication, @Valid @RequestBody CreateCategoryDTO categoryDTO){
 
         Category category = categoryService.addCategory(authentication,categoryDTO);
 
@@ -52,7 +52,7 @@ public class CategoryController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> addCategory(Authentication authentication, @PathVariable long id){
+    public ResponseEntity<MessageDTO> addCategory(Authentication authentication, @PathVariable long id){
 
         categoryService.deleteCategory(authentication,id);
 
@@ -68,7 +68,7 @@ public class CategoryController {
 
 
     @PutMapping
-    public ResponseEntity<?> changeCategory(Authentication authentication, @RequestBody @Valid ChangeCategoryDTO changeCategoryDTO){
+    public ResponseEntity<CategoryDTO> changeCategory(Authentication authentication, @RequestBody @Valid ChangeCategoryDTO changeCategoryDTO){
 
         Category category = categoryService.changeCategoryName(authentication, changeCategoryDTO.getId(), changeCategoryDTO.getNewName());
 
@@ -83,7 +83,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
 
     @GetMapping
-    public ResponseEntity<?> getAllCategories(Authentication authentication){
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(Authentication authentication){
 
         List<CategoryDTO> categories = categoryService.getAllCategories(authentication);
 

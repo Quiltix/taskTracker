@@ -35,7 +35,7 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
     @PostMapping
-    public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO){
+    public ResponseEntity<TaskDTO> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO){
 
         Task task = taskService.createTasks(authentication,taskDTO);
 
@@ -48,7 +48,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllTasksByToken(Authentication authentication) {
+    public ResponseEntity<List<TaskDTO>> getAllTasksByToken(Authentication authentication) {
 
         List<TaskDTO> tasks= taskService.getAllTasks(authentication);
 
@@ -62,7 +62,7 @@ public class TaskController {
     @ApiResponse(responseCode = "401", description = "Нет прав на удаление")
     @ApiResponse(responseCode = "500", description = "Server error")
     @DeleteMapping("/{taskId}")
-    public ResponseEntity<?> deleteTask(Authentication authentication,@Valid @PathVariable long taskId) {
+    public ResponseEntity<MessageDTO> deleteTask(Authentication authentication,@Valid @PathVariable long taskId) {
 
         taskService.deleteTask(authentication,taskId);
 
@@ -77,7 +77,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
 
     @PutMapping("/{taskId}/complete")
-    public ResponseEntity<?> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
+    public ResponseEntity<TaskDTO> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
 
         Task task =  taskService.markTaskAsComplete(taskId,authentication);
 
@@ -92,7 +92,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @Valid @RequestBody EditTaskDTO editTaskDTO) {
+    public ResponseEntity<TaskDTO> editTask(Authentication authentication, @PathVariable long id, @Valid @RequestBody EditTaskDTO editTaskDTO) {
 
         Task task =  taskService.editTask(authentication,id,editTaskDTO);
 
@@ -106,7 +106,7 @@ public class TaskController {
     @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
     @ApiResponse(responseCode = "500", description = "Server error")
     @GetMapping("/by-category")
-    public ResponseEntity<?> filterByCategory(Authentication authentication, @RequestParam long id) {
+    public ResponseEntity<List<TaskDTO>> filterByCategory(Authentication authentication, @RequestParam long id) {
 
         List<TaskDTO> tasks =  taskService.getTaskByCategory(authentication,id);
 
@@ -120,13 +120,25 @@ public class TaskController {
     @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
     @ApiResponse(responseCode = "500", description = "Server error")
     @GetMapping("/by-status")
-    public ResponseEntity<?> filterByStatus(Authentication authentication, @RequestParam StatusEnum status) {
+    public ResponseEntity<List<TaskDTO>> filterByStatus(Authentication authentication, @RequestParam StatusEnum status) {
 
         List<TaskDTO> tasks =  taskService.getTaskByStatus(authentication,status);
 
         return ResponseEntity.ok().body(tasks);
 
     }
+
+
+    @Operation(summary = "Получение важных таск ")
+    @ApiResponse(responseCode = "200", description = "Задачи получены")
+    @ApiResponse(responseCode = "401", description = "Нет прав на получение")
+    @ApiResponse(responseCode = "500", description = "Server error")
+    @GetMapping("/important")
+    public ResponseEntity<List<TaskDTO>> getImportantTasks(Authentication authentication) {
+        List<TaskDTO> tasks = taskService.getImportantTasks(authentication);
+        return ResponseEntity.ok(tasks);
+    }
+
 
 }
 

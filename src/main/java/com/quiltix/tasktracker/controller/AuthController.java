@@ -51,7 +51,7 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/register")
-    public ResponseEntity <?> registerUser ( @RequestBody @Valid RegisterRequestDTO registerRequestDTO){
+    public ResponseEntity <MessageDTO> registerUser ( @RequestBody @Valid RegisterRequestDTO registerRequestDTO){
 
         String message = userService.registerUser(registerRequestDTO);
 
@@ -78,7 +78,7 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<JwtAuthenticationResponseDTO> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
 
 
         String token = userService.authenticateUser(loginRequestDTO);
