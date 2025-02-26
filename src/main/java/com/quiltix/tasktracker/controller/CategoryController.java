@@ -10,7 +10,7 @@ import com.quiltix.tasktracker.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityExistsException;
+
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -37,14 +37,11 @@ public class CategoryController {
 
     @PostMapping()
     public ResponseEntity<?> addCategory(Authentication authentication, @Valid @RequestBody CreateCategoryDTO categoryDTO){
-        try {
-            Category category = categoryService.addCategory(authentication,categoryDTO);
-            return ResponseEntity.ok().body(new CategoryDTO(category));
-        }catch (EntityExistsException ex){
-            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
-        } catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        Category category = categoryService.addCategory(authentication,categoryDTO);
+
+        return ResponseEntity.ok().body(new CategoryDTO(category));
+
     }
 
     @Operation(summary = "Удаление категории")
@@ -56,12 +53,11 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> addCategory(Authentication authentication, @PathVariable long id){
-        try {
-            categoryService.deleteCategory(authentication,id);
-            return ResponseEntity.ok().body(new MessageDTO("Category deleted successfully"));
-        } catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        categoryService.deleteCategory(authentication,id);
+
+        return ResponseEntity.ok().body(new MessageDTO("Category deleted successfully"));
+
     }
 
     @Operation(summary = "Изменение названия категории")
@@ -73,12 +69,11 @@ public class CategoryController {
 
     @PutMapping
     public ResponseEntity<?> changeCategory(Authentication authentication, @RequestBody @Valid ChangeCategoryDTO changeCategoryDTO){
-        try {
-            Category category = categoryService.changeCategoryName(authentication, changeCategoryDTO.getId(), changeCategoryDTO.getNewName());
-            return ResponseEntity.ok().body(new CategoryDTO(category));
-        } catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        Category category = categoryService.changeCategoryName(authentication, changeCategoryDTO.getId(), changeCategoryDTO.getNewName());
+
+        return ResponseEntity.ok().body(new CategoryDTO(category));
+
     }
 
     @Operation(summary = "Получение всех категорий")
@@ -89,12 +84,11 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<?> getAllCategories(Authentication authentication){
-        try {
-            List<CategoryDTO> categories = categoryService.getAllCategories(authentication);
-            return ResponseEntity.ok().body(categories);
-        } catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        List<CategoryDTO> categories = categoryService.getAllCategories(authentication);
+
+        return ResponseEntity.ok().body(categories);
+
     }
 
 

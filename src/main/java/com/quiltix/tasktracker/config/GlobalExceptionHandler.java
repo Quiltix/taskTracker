@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.config;
 
 
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,7 +18,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex){
-        System.out.println(1);
         return ResponseEntity.badRequest().body(new MessageDTO(Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage()));
     }
 
@@ -34,5 +34,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundExceptions(EntityNotFoundException ex){
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllExceptions(Exception ex) {
+        return ResponseEntity.status(500).body(new MessageDTO("Internal server error: " + ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> IllegalArgumentExceptionExceptions(IllegalArgumentException ex){
+        return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<?> EntityExistsExceptionExceptions(EntityExistsException ex){
+        return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
     }
 }

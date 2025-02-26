@@ -52,15 +52,11 @@ public class AuthController {
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/register")
     public ResponseEntity <?> registerUser ( @RequestBody @Valid RegisterRequestDTO registerRequestDTO){
-        try {
-            String message = userService.registerUser(registerRequestDTO);
-            return ResponseEntity.ok().body(new MessageDTO(message));
-        }catch (IllegalArgumentException ex){
-            return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
-        }
-        catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        String message = userService.registerUser(registerRequestDTO);
+
+        return ResponseEntity.ok().body(new MessageDTO(message));
+
     }
 
     @Operation(
@@ -84,12 +80,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
 
-        try {
-            String token = userService.authenticateUser(loginRequestDTO);
-            return ResponseEntity.ok().body(new JwtAuthenticationResponseDTO(token));
-        }catch (Exception ex){
-            return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-        }
+
+        String token = userService.authenticateUser(loginRequestDTO);
+
+        return ResponseEntity.ok().body(new JwtAuthenticationResponseDTO(token));
+
     }
 
 }

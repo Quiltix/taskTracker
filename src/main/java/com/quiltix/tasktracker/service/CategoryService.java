@@ -41,7 +41,7 @@ public class CategoryService {
 
 
     @CacheEvict(value = "categories", allEntries = true)
-    public void deleteCategory(Authentication authentication,Long categoryId){
+    public void deleteCategory(Authentication authentication,Long categoryId) {
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
 

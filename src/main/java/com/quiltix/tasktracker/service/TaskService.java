@@ -38,7 +38,7 @@ public class TaskService {
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
-    public Task createTasks(Authentication authentication, CreateTaskDTO taskDTO) throws Exception{
+    public Task createTasks(Authentication authentication, CreateTaskDTO taskDTO){
         String username = authentication.getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

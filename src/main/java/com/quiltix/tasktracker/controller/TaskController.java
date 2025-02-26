@@ -35,14 +35,11 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
     @ApiResponse(responseCode = "400", description = "Некорректные данные")
     @PostMapping
-    public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO) {
-        try{
-            Task task = taskService.createTasks(authentication,taskDTO);
-            return ResponseEntity.ok().body(new TaskDTO(task));
-        }
-        catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+    public ResponseEntity<?> addTask(Authentication authentication,@Valid @RequestBody CreateTaskDTO taskDTO){
+
+        Task task = taskService.createTasks(authentication,taskDTO);
+
+        return ResponseEntity.ok().body(new TaskDTO(task));
     }
 
     @Operation(summary = "Получение всех задач")
@@ -52,12 +49,11 @@ public class TaskController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllTasksByToken(Authentication authentication) {
-       try {
-           List<TaskDTO> tasks= taskService.getAllTasks(authentication);
-           return ResponseEntity.ok().body(tasks);
-       } catch (Exception ex){
-           return ResponseEntity.status(500).body(new MessageDTO(ex.getMessage()));
-       }
+
+        List<TaskDTO> tasks= taskService.getAllTasks(authentication);
+
+        return ResponseEntity.ok().body(tasks);
+
     }
 
     @Operation(summary = "Удаление задачи")
@@ -67,12 +63,11 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
     @DeleteMapping("/{taskId}")
     public ResponseEntity<?> deleteTask(Authentication authentication,@Valid @PathVariable long taskId) {
-        try{
-            taskService.deleteTask(authentication,taskId);
-            return ResponseEntity.ok().body(new MessageDTO("Task deleted successfully"));
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+
+        taskService.deleteTask(authentication,taskId);
+
+        return ResponseEntity.ok().body(new MessageDTO("Task deleted successfully"));
+
     }
 
     @Operation(summary = "Решение таски")
@@ -83,12 +78,11 @@ public class TaskController {
 
     @PutMapping("/{taskId}/complete")
     public ResponseEntity<?> completeTask(Authentication authentication,@Valid @PathVariable long taskId) {
-        try{
-            Task task =  taskService.markTaskAsComplete(taskId,authentication);
-            return ResponseEntity.ok().body(new TaskDTO(task));
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+
+        Task task =  taskService.markTaskAsComplete(taskId,authentication);
+
+        return ResponseEntity.ok().body(new TaskDTO(task));
+
     }
 
     @Operation(summary = "Изменение таски")
@@ -99,12 +93,11 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editTask(Authentication authentication, @PathVariable long id, @RequestBody EditTaskDTO editTaskDTO) {
-        try{
-            Task task =  taskService.editTask(authentication,id,editTaskDTO);
-            return ResponseEntity.ok().body(new TaskDTO(task));
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+
+        Task task =  taskService.editTask(authentication,id,editTaskDTO);
+
+        return ResponseEntity.ok().body(new TaskDTO(task));
+
     }
 
     @Operation(summary = "Получение таск по категории ")
@@ -114,12 +107,11 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
     @GetMapping("/by-category")
     public ResponseEntity<?> filterByCategory(Authentication authentication, @RequestParam long id) {
-        try{
-            List<TaskDTO> tasks =  taskService.getTaskByCategory(authentication,id);
-            return ResponseEntity.ok().body(tasks);
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+
+        List<TaskDTO> tasks =  taskService.getTaskByCategory(authentication,id);
+
+        return ResponseEntity.ok().body(tasks);
+
     }
 
     @Operation(summary = "Получение таск по статусу ")
@@ -129,12 +121,11 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Server error")
     @GetMapping("/by-status")
     public ResponseEntity<?> filterByStatus(Authentication authentication, @RequestParam StatusEnum status) {
-        try{
-            List<TaskDTO> tasks =  taskService.getTaskByStatus(authentication,status);
-            return ResponseEntity.ok().body(tasks);
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
-        }
+
+        List<TaskDTO> tasks =  taskService.getTaskByStatus(authentication,status);
+
+        return ResponseEntity.ok().body(tasks);
+
     }
 
 }
