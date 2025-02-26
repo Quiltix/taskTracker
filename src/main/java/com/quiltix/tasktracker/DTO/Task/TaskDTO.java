@@ -22,7 +22,7 @@ public class TaskDTO implements Serializable {
     public TaskDTO(Task task) {
         status = task.getStatus();
         important = task.getImportant();
-        category = task.getCategory().getId();
+        category = task.getCategory() != null ? task.getCategory().getId() : null;;
         startTime = task.getStartTime();
         timeToComplete = task.getTimeToComplete();
         description = task.getDescription();
@@ -36,10 +36,10 @@ public class TaskDTO implements Serializable {
 
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime timeToComplete;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime startTime;
 
     private Long category;

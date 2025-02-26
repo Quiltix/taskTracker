@@ -4,16 +4,14 @@ import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.TaskDTO;
+import com.quiltix.tasktracker.model.StatusEnum;
 import com.quiltix.tasktracker.model.Task;
-import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -118,6 +116,21 @@ public class TaskController {
     public ResponseEntity<?> filterByCategory(Authentication authentication, @RequestParam long id) {
         try{
             List<TaskDTO> tasks =  taskService.getTaskByCategory(authentication,id);
+            return ResponseEntity.ok().body(tasks);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @Operation(summary = "Получение таск по статусу ")
+    @ApiResponse(responseCode = "200", description = "Задачи получены")
+    @ApiResponse(responseCode = "400", description = "Нет такого статуса")
+    @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
+    @ApiResponse(responseCode = "500", description = "Server error")
+    @GetMapping("/by-status")
+    public ResponseEntity<?> filterByStatus(Authentication authentication, @RequestParam StatusEnum status) {
+        try{
+            List<TaskDTO> tasks =  taskService.getTaskByStatus(authentication,status);
             return ResponseEntity.ok().body(tasks);
         }catch (Exception e){
             return ResponseEntity.status(500).body(new MessageDTO(e.getMessage()));

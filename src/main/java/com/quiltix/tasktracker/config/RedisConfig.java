@@ -1,6 +1,8 @@
 package com.quiltix.tasktracker.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -22,16 +24,19 @@ public class RedisConfig {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory){
 
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(5))
                 .disableCachingNullValues()
                 .serializeValuesWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer( new GenericJackson2JsonRedisSerializer())
-
+                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(mapper))
                 );
+
         Map<String,RedisCacheConfiguration> cacheConfigurationMap = new HashMap<>();
         cacheConfigurationMap.put("categories", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
-        cacheConfigurationMap.put("allTasks", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
+        cacheConfigurationMap.put("allTasks:status", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
         cacheConfigurationMap.put("tasksByCategory", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
 
         return RedisCacheManager.builder(redisConnectionFactory)

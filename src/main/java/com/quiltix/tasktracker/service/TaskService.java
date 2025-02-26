@@ -131,4 +131,14 @@ public class TaskService {
 
         return taskRepository.findByOwnerAndCategory(user,category).stream().map(TaskDTO::new).toList();
     }
+
+    @Cacheable(value = "tasksByStatus",key = "#authentication.name + ':' + #status")
+    public List<TaskDTO> getTaskByStatus(Authentication authentication, StatusEnum status){
+
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("user not found"));
+
+        return taskRepository.findByOwnerAndStatus(user,status).stream().map(TaskDTO::new).toList();
+    }
 }

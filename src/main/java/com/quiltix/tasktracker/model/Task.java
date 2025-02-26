@@ -43,6 +43,7 @@ public class Task {
     @JoinColumn(name = "User_id")
     private User owner;
 
+    @Enumerated(EnumType.ORDINAL)
     private StatusEnum status; // Создано сделано просрочено
 
 }
