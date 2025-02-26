@@ -51,7 +51,7 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(type = "string",example = "Try again later")))
     @PostMapping("/register")
-    public ResponseEntity <?> registerUser (@Valid @RequestBody RegisterRequestDTO registerRequestDTO){
+    public ResponseEntity <?> registerUser ( @RequestBody @Valid RegisterRequestDTO registerRequestDTO){
         try {
             String message = userService.registerUser(registerRequestDTO);
             return ResponseEntity.ok().body(new MessageDTO(message));

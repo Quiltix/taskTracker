@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min = 4, message = "Username must be at least 4 characters long")
+    @Size(min = 3, message = "Username must be at least 3 characters long")
     @Column(unique = true, nullable = false)
     private String username;
 
