@@ -6,6 +6,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,5 +50,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<?> EntityExistsExceptionExceptions(EntityExistsException ex){
         return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
+
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> BadCredentialsExceptionExceptions(BadCredentialsException ex){
+        return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 }
