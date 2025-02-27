@@ -4,6 +4,7 @@ package com.quiltix.tasktracker.config;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -37,10 +39,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAllExceptions(Exception ex) {
-        return ResponseEntity.status(500).body(new MessageDTO("Internal server error: " + ex.getMessage()));
-    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> IllegalArgumentExceptionExceptions(IllegalArgumentException ex){
@@ -56,5 +55,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> BadCredentialsExceptionExceptions(BadCredentialsException ex){
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllExceptions(Exception ex) {
+        log.error(ex.toString());
+        return ResponseEntity.status(500).body(new MessageDTO("Internal server error: " + ex.getMessage()));
     }
 }
