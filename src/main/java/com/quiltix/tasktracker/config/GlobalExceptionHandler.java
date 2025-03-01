@@ -29,7 +29,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new MessageDTO("User not found"));
     }
 
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedExceptions(AccessDeniedException ex){
         return ResponseEntity.status(401).body(new MessageDTO(ex.getMessage()));

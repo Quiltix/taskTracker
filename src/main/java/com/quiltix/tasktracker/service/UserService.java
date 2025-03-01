@@ -2,9 +2,11 @@ package com.quiltix.tasktracker.service;
 
 import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
+import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,5 +63,20 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return jwtTokenProvider.generateToken(authentication);
+    }
+
+    public void updateEmail(Authentication authentication, SetEmailDTO emailDTO){
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        userRepository.findByEmail(emailDTO.getEmail()).ifPresent(user1 -> {
+            if (!user1.getEmail().equals(username)){
+                throw new EntityExistsException("Email is already in use by another user");
+            }
+        });
+        user.setEmail(emailDTO.getEmail());
+
+        userRepository.save(user);
     }
 }
