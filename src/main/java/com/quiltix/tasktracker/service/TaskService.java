@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TaskService {
@@ -71,11 +72,11 @@ public class TaskService {
 
         if (isImportant){
             if(cacheManager.getCache("importantTasks")!= null){
-                cacheManager.getCache("importantTasks").evict(username);
+                Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
         }
         if (cacheManager.getCache("tasksByStatus") != null){
-            cacheManager.getCache("tasksByStatus").evict(username + ":" + StatusEnum.CREATED);
+            Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + StatusEnum.CREATED);
         }
         return updatedTask;
     }
@@ -97,11 +98,11 @@ public class TaskService {
 
         if (isImportant){
             if(cacheManager.getCache("importantTasks")!= null){
-                cacheManager.getCache("importantTasks").evict(username);
+                Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
         }
         if (cacheManager.getCache("tasksByStatus") != null){
-            cacheManager.getCache("tasksByStatus").evict(username + ":" + status);
+            Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + status);
         }
 
     }
@@ -124,13 +125,13 @@ public class TaskService {
         boolean isImportant = Boolean.TRUE.equals(task.getImportant());
         if (cacheManager.getCache("tasksByStatus") != null) {
             if (!oldStatus.equals(StatusEnum.COMPLETED)) {
-                cacheManager.getCache("tasksByStatus").evict(username + ":" + oldStatus);
+                Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + oldStatus);
             }
-            cacheManager.getCache("tasksByStatus").evict(username + ":" + StatusEnum.COMPLETED);
+            Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + StatusEnum.COMPLETED);
         }
         if (isImportant){
             if(cacheManager.getCache("importantTasks")!= null){
-                cacheManager.getCache("importantTasks").evict(username);
+                Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
         }
         return updatedTask;
@@ -165,7 +166,7 @@ public class TaskService {
 
         if (Boolean.TRUE.equals(updatedTask.getImportant())) {
             if (cacheManager.getCache("importantTasks") != null) {
-                cacheManager.getCache("importantTasks").evict(username);
+                Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
         }
         return updatedTask;

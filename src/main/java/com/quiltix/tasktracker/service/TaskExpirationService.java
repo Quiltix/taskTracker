@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TaskExpirationService {
@@ -32,16 +33,16 @@ public class TaskExpirationService {
 
 
         if (cacheManager.getCache("allTasks") != null) {
-            cacheManager.getCache("allTasks").clear();
+            Objects.requireNonNull(cacheManager.getCache("allTasks")).clear();
         }
         if (cacheManager.getCache("tasksByCategory") != null) {
-            cacheManager.getCache("tasksByCategory").clear();
+            Objects.requireNonNull(cacheManager.getCache("tasksByCategory")).clear();
         }
         if (cacheManager.getCache("tasksByStatus") != null) {
-            cacheManager.getCache("tasksByStatus").clear();
+            Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).clear();
         }
         if (cacheManager.getCache("importantTasks") != null) {
-            cacheManager.getCache("importantTasks").clear();
+            Objects.requireNonNull(cacheManager.getCache("importantTasks")).clear();
         }
     }
 }

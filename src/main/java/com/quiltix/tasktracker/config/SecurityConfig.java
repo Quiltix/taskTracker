@@ -1,7 +1,6 @@
 package com.quiltix.tasktracker.config;
 
 import com.quiltix.tasktracker.security.JwtAuthentificationFilter;
-import com.quiltix.tasktracker.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthentificationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthentificationFilter jwtAuthentificationFilter) {
-        this.customUserDetailsService = customUserDetailsService;
+    public SecurityConfig(JwtAuthentificationFilter jwtAuthentificationFilter) {
         this.jwtAuthenticationFilter = jwtAuthentificationFilter;
     }
 
