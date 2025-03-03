@@ -2,6 +2,7 @@ package com.quiltix.tasktracker.service;
 
 import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
+import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
@@ -78,5 +79,20 @@ public class UserService {
         user.setEmail(emailDTO.getEmail());
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void resetPasswordWithAuth(Authentication authentication, ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(resetPasswordWithAuthDTO.getOldPassword(),user.getPassword())){
+            throw new IllegalArgumentException("Password doesn't equals");
+        }
+        user.setPassword(passwordEncoder.encode(resetPasswordWithAuthDTO.getNewPassword()));
+
+        userRepository.save(user);
+
     }
 }

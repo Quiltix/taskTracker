@@ -6,6 +6,7 @@ import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
 import com.quiltix.tasktracker.DTO.Task.TaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,10 +24,14 @@ public class TaskService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+    private final CacheManager cacheManager;
+
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, CategoryRepository categoryRepository,
+                       CacheManager cacheManager) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.cacheManager = cacheManager;
     }
 
     @Cacheable(value = "allTasks",key = "#authentication.name")
@@ -59,7 +64,18 @@ public class TaskService {
         }
 
         Task task = taskBuilder.build();
-        return taskRepository.save(task);
+
+        boolean isImportant = Boolean.TRUE.equals(task.getImportant());
+
+        Task updatedTask = taskRepository.save(task);
+
+        if (isImportant){
+            if(cacheManager.getCache("importantTasks")!= null){
+                cacheManager.getCache("importantTasks").evict(username);
+            }
+        }
+
+        return updatedTask;
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
@@ -72,7 +88,15 @@ public class TaskService {
             throw new AccessDeniedException("You are not authorized to delete this task");
         }
 
+        boolean isImportant = Boolean.TRUE.equals(task.getImportant());
+
         taskRepository.delete(task);
+
+        if (isImportant){
+            if(cacheManager.getCache("importantTasks")!= null){
+                cacheManager.getCache("importantTasks").evict(username);
+            }
+        }
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
@@ -87,7 +111,15 @@ public class TaskService {
 
         task.setStatus(StatusEnum.COMPLETED);
 
-        return taskRepository.save(task);
+        Task updatedTask = taskRepository.save(task);
+
+        boolean isImportant = Boolean.TRUE.equals(task.getImportant());
+        if (isImportant){
+            if(cacheManager.getCache("importantTasks")!= null){
+                cacheManager.getCache("importantTasks").evict(username);
+            }
+        }
+        return updatedTask;
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
@@ -115,8 +147,14 @@ public class TaskService {
         if (editTaskDTO.getImportant() != null) {
             task.setImportant(editTaskDTO.getImportant());
         }
+        Task updatedTask = taskRepository.save(task);
 
-        return taskRepository.save(task);
+        if (Boolean.TRUE.equals(updatedTask.getImportant())) {
+            if (cacheManager.getCache("importantTasks") != null) {
+                cacheManager.getCache("importantTasks").evict(username);
+            }
+        }
+        return updatedTask;
     }
 
     @Cacheable(value = "tasksByCategory",key = "#authentication.name + ':' + #categoryId")
@@ -153,5 +191,7 @@ public class TaskService {
                 .map(TaskDTO::new)
                 .toList();
     }
+
+    //
 
 }

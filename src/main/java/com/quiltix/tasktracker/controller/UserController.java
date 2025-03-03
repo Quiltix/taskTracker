@@ -2,8 +2,11 @@ package com.quiltix.tasktracker.controller;
 
 
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
 import com.quiltix.tasktracker.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +28,29 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Обновление почты")
+    @ApiResponse(responseCode = "200", description = "Успешное обновление")
+    @ApiResponse(responseCode = "400", description = "Ошибка запроса")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+
     @PutMapping("/email")
     public ResponseEntity<MessageDTO> setEmail(Authentication authentication, @Valid @RequestBody SetEmailDTO emailDTO){
 
         userService.updateEmail(authentication, emailDTO);
 
         return ResponseEntity.ok().body(new MessageDTO("Email updated successfully"));
+    }
+
+    @Operation(summary = "Изменение пароля")
+    @ApiResponse(responseCode = "200", description = "Успешное обновление")
+    @ApiResponse(responseCode = "400", description = "Ошибка запроса")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+    @PutMapping("/password")
+    public ResponseEntity<MessageDTO> updatePassword(Authentication authentication, @Valid @RequestBody ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
+
+        userService.resetPasswordWithAuth(authentication, resetPasswordWithAuthDTO);
+
+        return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
     }
 
 
