@@ -74,7 +74,9 @@ public class TaskService {
                 cacheManager.getCache("importantTasks").evict(username);
             }
         }
-
+        if (cacheManager.getCache("tasksByStatus") != null){
+            cacheManager.getCache("tasksByStatus").evict(username + ":" + StatusEnum.CREATED);
+        }
         return updatedTask;
     }
 
@@ -89,6 +91,7 @@ public class TaskService {
         }
 
         boolean isImportant = Boolean.TRUE.equals(task.getImportant());
+        StatusEnum status = task.getStatus();
 
         taskRepository.delete(task);
 
@@ -97,6 +100,10 @@ public class TaskService {
                 cacheManager.getCache("importantTasks").evict(username);
             }
         }
+        if (cacheManager.getCache("tasksByStatus") != null){
+            cacheManager.getCache("tasksByStatus").evict(username + ":" + status);
+        }
+
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
@@ -113,7 +120,14 @@ public class TaskService {
 
         Task updatedTask = taskRepository.save(task);
 
+        StatusEnum oldStatus = task.getStatus();
         boolean isImportant = Boolean.TRUE.equals(task.getImportant());
+        if (cacheManager.getCache("tasksByStatus") != null) {
+            if (!oldStatus.equals(StatusEnum.COMPLETED)) {
+                cacheManager.getCache("tasksByStatus").evict(username + ":" + oldStatus);
+            }
+            cacheManager.getCache("tasksByStatus").evict(username + ":" + StatusEnum.COMPLETED);
+        }
         if (isImportant){
             if(cacheManager.getCache("importantTasks")!= null){
                 cacheManager.getCache("importantTasks").evict(username);
@@ -122,7 +136,7 @@ public class TaskService {
         return updatedTask;
     }
 
-    @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
+    @CacheEvict(value = {"allTasks", "tasksByCategory", "tasksByStatus"}, allEntries = true)
     public Task editTask(Authentication authentication, long id, EditTaskDTO editTaskDTO){
         String username = authentication.getName();
 

@@ -30,7 +30,7 @@ public class TaskExpirationService {
             taskRepository.save(task);
         });
 
-        // После обновления задач очищаем кэши, связанные с задачами
+
         if (cacheManager.getCache("allTasks") != null) {
             cacheManager.getCache("allTasks").clear();
         }
