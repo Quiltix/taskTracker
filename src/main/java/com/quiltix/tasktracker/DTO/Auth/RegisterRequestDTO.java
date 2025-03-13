@@ -17,7 +17,7 @@ public class RegisterRequestDTO {
     @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @Size(min = 5, message = "password must be at least 5 characters long")
+    @Size(min = 7, message = "Password must be at least 7 characters long")
     @NotBlank(message = "Password cannot be empty")
     private String password;
 }
