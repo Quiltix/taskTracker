@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Random;
+
 
 @Service
 public class UserService {
@@ -26,7 +29,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final Random random = new Random();
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -82,7 +85,7 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPasswordWithAuth(Authentication authentication, ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
+    public void updatePasswordWithAuth(Authentication authentication, ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
         String username = authentication.getName();
 
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
@@ -93,6 +96,22 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(resetPasswordWithAuthDTO.getNewPassword()));
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void requestPasswordReset(String email) {
+
+        User user  = userRepository.findByEmail(email)
+                .orElseThrow(()-> new UsernameNotFoundException("User with email not found"));
+
+        String resetCode = String.format("%06d", random.nextInt(6));
+        LocalDateTime expireTime = LocalDateTime.now().plusMinutes(10);
+
+        user.setResetCode(resetCode);
+        user.setExpireCodeTime(expireTime);
+
+        userRepository.save(user);
+        System.out.println(resetCode);
 
     }
 }

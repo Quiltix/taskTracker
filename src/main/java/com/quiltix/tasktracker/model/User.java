@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column( unique = true, nullable = false)
+    @Column( unique = true)
     private String email;
+
+    private String resetCode;
+
+    private LocalDateTime expireCodeTime;
 }

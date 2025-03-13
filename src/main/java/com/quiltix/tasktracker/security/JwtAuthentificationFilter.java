@@ -43,7 +43,7 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
         }
         catch (Exception e){
-            logger.error("Я не ебу что я тут написал и что оно выкидывает но оно выдает ошибку "+ e.getMessage());
+            logger.error("Error with filter: "+ e.getMessage());
         }
 
 

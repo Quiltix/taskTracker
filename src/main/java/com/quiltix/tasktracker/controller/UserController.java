@@ -41,14 +41,14 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO("Email updated successfully"));
     }
 
-    @Operation(summary = "Изменение пароля")
+    @Operation(summary = "Изменение пароля с токеном (при нахождении авторизированным)")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
     @PutMapping("/password")
     public ResponseEntity<MessageDTO> updatePassword(Authentication authentication, @Valid @RequestBody ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
 
-        userService.resetPasswordWithAuth(authentication, resetPasswordWithAuthDTO);
+        userService.updatePasswordWithAuth(authentication, resetPasswordWithAuthDTO);
 
         return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
     }
