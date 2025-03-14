@@ -3,6 +3,7 @@ package com.quiltix.tasktracker.controller;
 
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
+import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,6 +53,21 @@ public class UserController {
 
         return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
     }
+
+    @Operation(summary = "Изменение пароля с имеющимся ресет кодом")
+    @ApiResponse(responseCode = "200", description = "Успешное обновление")
+    @ApiResponse(responseCode = "400", description = "Ошибка запроса")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+    @PutMapping("/password")
+    public ResponseEntity<MessageDTO> updatePasswordWithResetCode(@Valid @RequestBody ResetPasswordWithCodeDTO dataDTO){
+
+        userService.resetPasswordWithCode(dataDTO);
+
+        return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
+    }
+
+
+
 
 
 }

@@ -91,7 +91,7 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "Изменение пароля по почте")
+    @Operation(summary = "Отправка ресет кода по почте")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
@@ -102,5 +102,7 @@ public class AuthController {
 
         return ResponseEntity.ok().body( new MessageDTO("Check your email"));
     }
+
+
 
 }

@@ -3,6 +3,7 @@ package com.quiltix.tasktracker.service;
 import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
+import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
@@ -112,6 +113,28 @@ public class UserService {
 
         userRepository.save(user);
         System.out.println(resetCode);
+
+    }
+
+    @Transactional
+    public void resetPasswordWithCode(ResetPasswordWithCodeDTO dataDto){
+
+        User user = userRepository.findByEmail(dataDto.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email not found"));
+
+        if (! (user.getResetCode().equals(dataDto.getResetCode()) && LocalDateTime.now().isAfter(user.getExpireCodeTime()))){
+            throw new BadCredentialsException("Reset code incorrect, try again");
+        }
+        if (user.getResetCode() == null || user.getExpireCodeTime() == null) {
+            throw new BadCredentialsException("Invalid or expired reset code");
+        }
+
+        user.setPassword(passwordEncoder.encode(dataDto.getNewPassword()));
+        user.setResetCode(null);
+        user.setExpireCodeTime(null);
+
+        userRepository.save(user);
+
 
     }
 }

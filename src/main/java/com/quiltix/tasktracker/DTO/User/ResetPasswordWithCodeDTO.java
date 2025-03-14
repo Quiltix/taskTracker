@@ -20,6 +20,7 @@ public class ResetPasswordWithCodeDTO {
     @Size(min = 6, message = "Reset code must be 6 characters long")
     private String resetCode;
 
+    @NotBlank(message = "New password cannot be blank")
     @Size(min = 7, message = "Password must be at least 7 characters long")
     private String newPassword;
 }
