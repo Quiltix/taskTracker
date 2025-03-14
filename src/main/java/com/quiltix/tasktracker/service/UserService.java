@@ -91,8 +91,8 @@ public class UserService {
 
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
-        if (!passwordEncoder.matches(resetPasswordWithAuthDTO.getOldPassword(),user.getPassword())){
-            throw new IllegalArgumentException("Password doesn't equals");
+        if (!passwordEncoder.matches(resetPasswordWithAuthDTO.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Password doesn't match");
         }
         user.setPassword(passwordEncoder.encode(resetPasswordWithAuthDTO.getNewPassword()));
 
