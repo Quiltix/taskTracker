@@ -122,7 +122,7 @@ public class UserService {
         User user = userRepository.findByEmail(dataDto.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User with email not found"));
 
-        if (! (user.getResetCode().equals(dataDto.getResetCode()) && LocalDateTime.now().isAfter(user.getExpireCodeTime()))){
+        if (! (user.getResetCode().equals(dataDto.getResetCode()) && LocalDateTime.now().isBefore(user.getExpireCodeTime()))){
             throw new BadCredentialsException("Reset code incorrect, try again");
         }
         if (user.getResetCode() == null || user.getExpireCodeTime() == null) {

@@ -8,6 +8,7 @@ import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
+import com.quiltix.tasktracker.service.RateLimiterService;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +30,11 @@ public class AuthController {
 
 
     private final UserService userService;
+    private final RateLimiterService rateLimiterService;
 
+    public AuthController(UserService userService, RateLimiterService rateLimiterService) {
 
-    public AuthController(UserService userService) {
-
+        this.rateLimiterService = rateLimiterService;
         this.userService = userService;
     }
 
@@ -98,6 +101,13 @@ public class AuthController {
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
     @PostMapping("/password")
     public ResponseEntity<MessageDTO> updatePassword(@Email @RequestParam String email){
+
+        if (!rateLimiterService.tryAcquire(email)){
+            return ResponseEntity
+                    .status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body(new MessageDTO("Try again in 1 minute"));
+        }
+
 
         userService.requestPasswordReset(email);
 
