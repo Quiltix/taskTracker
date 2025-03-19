@@ -35,13 +35,12 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundExceptions(EntityNotFoundException ex){
+        log.error("Entity not found exception:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
-
-
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> IllegalArgumentExceptionExceptions(IllegalArgumentException ex){
+        log.error("IllegalArgumentExceptionExceptions:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 
@@ -53,6 +52,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> BadCredentialsExceptionExceptions(BadCredentialsException ex){
+        log.error("BadCredentialsExceptionExceptions:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 

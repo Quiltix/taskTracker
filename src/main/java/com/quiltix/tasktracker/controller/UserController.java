@@ -54,8 +54,4 @@ public class UserController {
         return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
     }
 
-
-
-
-
 }
