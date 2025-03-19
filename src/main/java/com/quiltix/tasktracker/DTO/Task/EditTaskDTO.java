@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Setter
 public class EditTaskDTO {
 
+
     @Size(min = 3, message = "title must be at least 3 characters long")
-    @NotBlank(message = "Title cannot be empty")
     private String title;
 
 
