@@ -5,6 +5,7 @@ import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
+import com.quiltix.tasktracker.DTO.User.UpdateUsernameDTO;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;
@@ -134,7 +135,28 @@ public class UserService {
         user.setExpireCodeTime(null);
 
         userRepository.save(user);
+    }
 
+    @Transactional
+    public String updateUsername(Authentication authentication, UpdateUsernameDTO usernameDTO){
 
+        String oldUsername = authentication.getName();
+
+        if (usernameDTO.getUsername().equals(oldUsername)){
+            throw new IllegalArgumentException("the username must not match");
+        }
+
+        if(userRepository.findUserByUsername(usernameDTO.getUsername()).isPresent()){
+            throw new BadCredentialsException("This username already defined");
+        }
+
+        User user = userRepository.findUserByUsername(oldUsername)
+                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+
+        user.setUsername(usernameDTO.getUsername());
+
+        userRepository.save(user);
+
+        return user.getUsername();
     }
 }

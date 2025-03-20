@@ -5,6 +5,7 @@ import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
+import com.quiltix.tasktracker.DTO.User.UpdateUsernameDTO;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,5 +54,19 @@ public class UserController {
 
         return ResponseEntity.ok().body( new MessageDTO("Password updated successfully"));
     }
+
+    @Operation(summary = "Изменение логина")
+    @ApiResponse(responseCode = "200", description = "Успешное обновление")
+    @ApiResponse(responseCode = "400", description = "Ошибка запроса")
+    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+    @PutMapping("/username")
+    public ResponseEntity<UpdateUsernameDTO> updatePassword(Authentication authentication, @Valid @RequestBody UpdateUsernameDTO usernameDTO){
+
+        String newName = userService.updateUsername(authentication, usernameDTO);
+
+        return ResponseEntity.ok().body( new UpdateUsernameDTO(newName));
+    }
+
+
 
 }
