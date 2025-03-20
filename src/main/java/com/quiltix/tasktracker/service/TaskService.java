@@ -156,8 +156,8 @@ public class TaskService {
         if (editTaskDTO.getTimeToComplete() != null) {
             task.setTimeToComplete(editTaskDTO.getTimeToComplete());
         }
-        if (editTaskDTO.getCategoryId() != null ) {
-            task.setCategory(categoryRepository.findById(editTaskDTO.getCategoryId()).orElseThrow(()-> new EntityNotFoundException("Category not found")));
+        if (editTaskDTO.getCategory() != null ) {
+            task.setCategory(categoryRepository.findById(editTaskDTO.getCategory()).orElseThrow(()-> new EntityNotFoundException("Category not found")));
         }
         if (editTaskDTO.getImportant() != null) {
             task.setImportant(editTaskDTO.getImportant());
@@ -187,7 +187,6 @@ public class TaskService {
 
     @Cacheable(value = "tasksByStatus",key = "#authentication.name + ':' + #status")
     public List<TaskDTO> getTaskByStatus(Authentication authentication, StatusEnum status){
-
         String username = authentication.getName();
 
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("user not found"));
