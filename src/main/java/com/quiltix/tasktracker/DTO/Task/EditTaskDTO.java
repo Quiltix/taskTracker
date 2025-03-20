@@ -25,7 +25,7 @@ public class EditTaskDTO {
 
     private Boolean important;
 
-    private Long category;
+    private Long categoryId;
 
     @Future(message = "Time must be in future")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

@@ -44,7 +44,7 @@ public class TaskDTO implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime startTime;
 
-    private Long category;
+    private Long categoryId;
 
     private boolean important;
 
