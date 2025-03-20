@@ -12,6 +12,6 @@ import lombok.Setter;
 public class CreateCategoryDTO {
 
     @Size(min = 3, message = "name must be at least 3 characters long")
-    @NotBlank(message = "Name of category cannot be empty")
+    @NotBlank(message = "Name of categoryId cannot be empty")
     private String name;
 }

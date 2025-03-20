@@ -12,10 +12,10 @@ import lombok.Setter;
 @Setter
 public class ChangeCategoryDTO {
 
-    @NotNull(message = "Id of category cannot be empty")
+    @NotNull(message = "Id of categoryId cannot be empty")
     private Long id;
 
     @Size(min = 3, message = "name must be at least 3 characters long")
-    @NotBlank(message = "Name of category cannot be empty")
+    @NotBlank(message = "Name of categoryId cannot be empty")
     private String newName;
 }

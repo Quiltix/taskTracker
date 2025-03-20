@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Category Controller")
-@RequestMapping("api/task/category")
+@RequestMapping("api/task/categoryId")
 public class CategoryController {
 
     private final CategoryService categoryService;

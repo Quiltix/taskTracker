@@ -48,7 +48,7 @@ public class CategoryService {
         String username = authentication.getName();
 
         if (category.getOwner()== null || ! category.getOwner().getUsername().equals(username)){
-            throw  new AccessDeniedException("You are not authorized to delete this category");
+            throw  new AccessDeniedException("You are not authorized to delete this categoryId");
         }
 
         categoryRepository.delete(category);
@@ -61,7 +61,7 @@ public class CategoryService {
         String username = authentication.getName();
 
         if (category.getOwner()== null || ! category.getOwner().getUsername().equals(username)){
-            throw  new AccessDeniedException("You are not authorized to change this category");
+            throw  new AccessDeniedException("You are not authorized to change this categoryId");
         }
         category.setName(newName);
 
