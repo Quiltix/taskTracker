@@ -26,6 +26,7 @@ public class Task {
 
     private String title;
 
+    @Lob
     private String description;
 
     private Boolean important;
@@ -43,6 +44,6 @@ public class Task {
     private User owner;
 
     @Enumerated(EnumType.ORDINAL)
-    private StatusEnum status; // Создано сделано просрочено
+    private StatusEnum status;
 
 }
