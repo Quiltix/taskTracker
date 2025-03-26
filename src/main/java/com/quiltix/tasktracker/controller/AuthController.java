@@ -4,6 +4,7 @@ package com.quiltix.tasktracker.controller;
 
 import com.quiltix.tasktracker.DTO.Auth.JwtAuthenticationResponseDTO;
 import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
+import com.quiltix.tasktracker.DTO.Auth.ResetPasswordRequestDTO;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
@@ -100,16 +101,16 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
     @PostMapping("/password")
-    public ResponseEntity<MessageDTO> updatePassword(@Email @RequestParam String email){
+    public ResponseEntity<MessageDTO> updatePassword(@Email @RequestBody ResetPasswordRequestDTO passwordRequestDTO ){
 
-        if (!rateLimiterService.tryAcquire(email)){
+        if (!rateLimiterService.tryAcquire(passwordRequestDTO.getEmail())){
             return ResponseEntity
                     .status(HttpStatus.TOO_MANY_REQUESTS)
                     .body(new MessageDTO("Try again in 1 minute"));
         }
 
 
-        userService.requestPasswordReset(email);
+        userService.requestPasswordReset(passwordRequestDTO.getEmail());
 
         return ResponseEntity.ok().body( new MessageDTO("Check your email"));
     }
