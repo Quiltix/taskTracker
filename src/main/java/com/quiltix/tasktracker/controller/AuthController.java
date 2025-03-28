@@ -101,7 +101,7 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
     @PostMapping("/password")
-    public ResponseEntity<MessageDTO> updatePassword(@Email @RequestBody ResetPasswordRequestDTO passwordRequestDTO ){
+    public ResponseEntity<MessageDTO> updatePassword( @Email @RequestBody ResetPasswordRequestDTO passwordRequestDTO ){
 
         if (!rateLimiterService.tryAcquire(passwordRequestDTO.getEmail())){
             return ResponseEntity

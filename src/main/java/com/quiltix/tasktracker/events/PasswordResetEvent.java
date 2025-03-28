@@ -1,13 +1,13 @@
 package com.quiltix.tasktracker.events;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import lombok.Builder;
+import lombok.Data;
+
+
+@Builder
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class PasswordResetEvent {
 
     private String email;

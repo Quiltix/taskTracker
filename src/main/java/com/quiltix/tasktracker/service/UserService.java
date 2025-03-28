@@ -2,14 +2,14 @@ package com.quiltix.tasktracker.service;
 
 import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
-import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
-import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
-import com.quiltix.tasktracker.DTO.User.SetEmailDTO;
-import com.quiltix.tasktracker.DTO.User.UpdateUsernameDTO;
+import com.quiltix.tasktracker.DTO.User.*;
+import com.quiltix.tasktracker.events.PasswordResetEvent;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;
 import jakarta.persistence.EntityExistsException;
+import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Random;
 
 
@@ -31,12 +32,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final KafkaTemplate<String, PasswordResetEvent> kafkaTemplate;
     private final Random random = new Random();
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, KafkaTemplate<String, PasswordResetEvent> kafkaTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -113,8 +116,14 @@ public class UserService {
         user.setExpireCodeTime(expireTime);
 
         userRepository.save(user);
-        System.out.println(resetCode);
 
+        PasswordResetEvent event = PasswordResetEvent.builder()
+                .email(email)
+                .resetCode(resetCode)
+                .expirationEpochSec(expireTime.toEpochSecond(ZoneOffset.UTC))
+                .build();
+
+        kafkaTemplate.send("password-reset",event);
     }
 
     @Transactional
@@ -158,5 +167,19 @@ public class UserService {
         userRepository.save(user);
 
         return user.getUsername();
+    }
+
+    public ProfileInfoDTO getProfileInfo(Authentication authentication){
+
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        ProfileInfoDTO profileInfoDTO = new ProfileInfoDTO();
+
+        profileInfoDTO.setUsername(username);
+        profileInfoDTO.setEmail(user.getEmail());
+
+        return profileInfoDTO;
     }
 }
