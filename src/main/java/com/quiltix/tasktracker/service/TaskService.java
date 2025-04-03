@@ -57,7 +57,6 @@ public class TaskService {
                 .owner(user)
                 .status(StatusEnum.CREATED);
 
-
         if (taskDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(taskDTO.getCategoryId())
                     .orElseThrow(() -> new EntityNotFoundException("Category not found"));
@@ -104,7 +103,6 @@ public class TaskService {
         if (cacheManager.getCache("tasksByStatus") != null){
             Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + status);
         }
-
     }
 
     @CacheEvict(value = {"allTasks", "tasksByCategory"}, allEntries = true)
@@ -146,7 +144,6 @@ public class TaskService {
         if (!task.getOwner().getUsername().equals(username)) {
             throw new AccessDeniedException("You are not authorized to complete this task");
         }
-
         if (editTaskDTO.getTitle() != null) {
             task.setTitle(editTaskDTO.getTitle());
         }

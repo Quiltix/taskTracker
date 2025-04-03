@@ -19,6 +19,7 @@ public class RateLimiterService {
         String key = "passwordResetRate:" + email;
 
         Boolean success = redisTemplate.opsForValue().setIfAbsent(key,"1",60, TimeUnit.SECONDS);
+
         return Boolean.TRUE.equals(success);
     }
 }

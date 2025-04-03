@@ -33,11 +33,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                     user.getPassword(),
                     Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
         }
+
         catch (UsernameNotFoundException e){
             log.error("Не найдено user с логином {} {}", username, e.getMessage());
             return null;
         }
-
-
     }
 }
