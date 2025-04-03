@@ -31,7 +31,6 @@ public class TaskExpirationService {
             taskRepository.save(task);
         });
 
-
         if (cacheManager.getCache("allTasks") != null) {
             Objects.requireNonNull(cacheManager.getCache("allTasks")).clear();
         }

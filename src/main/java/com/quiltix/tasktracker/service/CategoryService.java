@@ -41,7 +41,6 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-
     @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Authentication authentication,Long categoryId) {
 
@@ -59,6 +58,7 @@ public class CategoryService {
 
     @CacheEvict(value = "categories", allEntries = true)
     public Category changeCategoryName(Authentication authentication, Long categoryId, String newName){
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         String username = authentication.getName();
@@ -73,7 +73,9 @@ public class CategoryService {
 
     @Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategories(Authentication authentication){
+
         String username = authentication.getName();
+
         User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
         return categoryRepository.findByOwner(user).stream().map(CategoryDTO::new).toList();
