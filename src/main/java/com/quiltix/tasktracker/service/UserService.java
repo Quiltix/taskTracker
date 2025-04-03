@@ -232,6 +232,14 @@ public class UserService {
 
     }
 
+    public String getAvatarUrl(Authentication authentication){
+
+        User user = getCurrentUser(authentication);
+
+        return user.getAvatarUrl();
+
+    }
+
     private User getCurrentUser(Authentication authentication) {
         return userRepository.findUserByUsername(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

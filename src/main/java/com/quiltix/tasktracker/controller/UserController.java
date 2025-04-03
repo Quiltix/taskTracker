@@ -85,4 +85,14 @@ public class UserController {
         return ResponseEntity.ok(new MessageDTO("Avatar updated successfully"));
     }
 
+    @Operation(summary = "Получение url аватара")
+    @ApiResponse(responseCode = "200", description = "Аватар успешно получен")
+    @ApiResponse(responseCode = "400", description = "Ошибка при загрузке файла")
+    @GetMapping("/avatar")
+    public ResponseEntity<MessageDTO> uploadAvatar(Authentication authentication){
+        String url = userService.getAvatarUrl(authentication);
+
+        return ResponseEntity.ok(new MessageDTO(url));
+    }
+
 }
