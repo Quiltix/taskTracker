@@ -35,4 +35,6 @@ public class User {
     private String resetCode;
 
     private LocalDateTime expireCodeTime;
+
+    private String avatarUrl;
 }
