@@ -24,5 +24,4 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> findByStatusAndTimeToCompleteBefore(StatusEnum status, LocalDateTime now);
 
-
 }

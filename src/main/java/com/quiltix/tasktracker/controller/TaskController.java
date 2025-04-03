@@ -22,14 +22,12 @@ import java.util.List;
 @RequestMapping("api/task")
 public class TaskController {
 
-
     private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
 
     }
-
 
     @Operation(summary = "Добавление новой задачи")
     @ApiResponse(responseCode = "200", description = "Задача успешно добавлена")
@@ -138,7 +136,6 @@ public class TaskController {
         List<TaskDTO> tasks = taskService.getImportantTasks(authentication);
         return ResponseEntity.ok(tasks);
     }
-
 
 }
 

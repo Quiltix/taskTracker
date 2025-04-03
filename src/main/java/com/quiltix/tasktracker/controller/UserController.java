@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/user")
 public class UserController {
 
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -85,6 +84,5 @@ public class UserController {
 
         return ResponseEntity.ok(new MessageDTO("Avatar updated successfully"));
     }
-
 
 }

@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-
     private final UserService userService;
     private final RateLimiterService rateLimiterService;
 
@@ -88,13 +87,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationResponseDTO> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
 
-
         String token = userService.authenticateUser(loginRequestDTO);
 
         return ResponseEntity.ok().body(new JwtAuthenticationResponseDTO(token));
 
     }
-
 
     @Operation(summary = "Отправка ресет кода по почте")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
@@ -108,7 +105,6 @@ public class AuthController {
                     .status(HttpStatus.TOO_MANY_REQUESTS)
                     .body(new MessageDTO("Try again in 1 minute"));
         }
-
 
         userService.requestPasswordReset(passwordRequestDTO.getEmail());
 
