@@ -8,9 +8,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "User Controller")
 @RestController
@@ -73,6 +76,15 @@ public class UserController {
         return ResponseEntity.ok().body(profileInfoDTO);
     }
 
+    @Operation(summary = "Загрузка аватара пользователя")
+    @ApiResponse(responseCode = "200", description = "Аватар успешно обновлен")
+    @ApiResponse(responseCode = "400", description = "Ошибка при загрузке файла")
+    @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MessageDTO> uploadAvatar(Authentication authentication, @RequestParam("avatar")MultipartFile file){
+        userService.updateAvatar(authentication,file);
+
+        return ResponseEntity.ok(new MessageDTO("Avatar updated successfully"));
+    }
 
 
 }

@@ -8,7 +8,10 @@ import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;
 import jakarta.persistence.EntityExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.protocol.types.Field;
+import org.apache.tika.Tika;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,14 +22,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Random;
+import java.util.UUID;
 
 
 @Service
+@Slf4j
 public class UserService {
+
+    @Value("${app.avatar-dir}")
+    private String avatarDir;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -77,7 +91,7 @@ public class UserService {
     public void updateEmail(Authentication authentication, SetEmailDTO emailDTO){
         String username = authentication.getName();
 
-        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        User user = getCurrentUser(authentication);
 
         userRepository.findByEmail(emailDTO.getEmail()).ifPresent(user1 -> {
             if (!user1.getEmail().equals(username)){
@@ -93,7 +107,7 @@ public class UserService {
     public void updatePasswordWithAuth(Authentication authentication, ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
         String username = authentication.getName();
 
-        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        User user = getCurrentUser(authentication);
 
         if (!passwordEncoder.matches(resetPasswordWithAuthDTO.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Password doesn't match");
@@ -159,8 +173,7 @@ public class UserService {
             throw new BadCredentialsException("This username already defined");
         }
 
-        User user = userRepository.findUserByUsername(oldUsername)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+        User user = getCurrentUser(authentication);
 
         user.setUsername(usernameDTO.getUsername());
 
@@ -173,13 +186,74 @@ public class UserService {
 
         String username = authentication.getName();
 
-        User user = userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        User user = getCurrentUser(authentication);
 
         ProfileInfoDTO profileInfoDTO = new ProfileInfoDTO();
 
         profileInfoDTO.setUsername(username);
         profileInfoDTO.setEmail(user.getEmail());
+        profileInfoDTO.setAvatarUrl(user.getAvatarUrl() != null ? "/avatars/" + user.getAvatarUrl() : null);
 
         return profileInfoDTO;
+    }
+
+    public void updateAvatar(Authentication authentication, MultipartFile file){
+
+        User user = getCurrentUser(authentication);
+
+        if(file.isEmpty()){
+            throw new IllegalArgumentException("File is empty");
+        }
+        try {
+            String mimeType = new Tika().detect(file.getBytes());
+            if (!mimeType.startsWith("image/")) {
+                throw new IllegalArgumentException("Invalid image format");
+            }
+        } catch (IOException e) {
+            log.error("Error reading file", e);
+            throw new RuntimeException("Error reading file", e);
+        }
+
+        String fileName = UUID.randomUUID()+ file.getOriginalFilename()
+                                            .substring(file.getOriginalFilename()
+                                            .lastIndexOf("."));
+
+        Path targetPath = Path.of(avatarDir,fileName);
+
+        String oldFileName = user.getAvatarUrl();
+        saveFile(file,targetPath);
+
+
+        user.setAvatarUrl(fileName);
+        userRepository.save(user);
+
+        deleteOldAvatar(oldFileName);
+
+
+    }
+
+    private User getCurrentUser(Authentication authentication) {
+        return userRepository.findUserByUsername(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    private void saveFile(MultipartFile file, Path targetPath){
+        try {
+            Files.createDirectories(targetPath.getParent());
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save file", e);
+        }
+    }
+
+    private void deleteOldAvatar(String oldAvatarPath) {
+        if (oldAvatarPath != null) {
+            try {
+                Path path = Paths.get(avatarDir, oldAvatarPath);
+                Files.deleteIfExists(path);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to remove file", e);
+            }
+        }
     }
 }
