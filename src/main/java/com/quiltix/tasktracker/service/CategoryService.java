@@ -20,10 +20,12 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
-    public CategoryService(CategoryRepository categoryRepository,UserRepository userRepository) {
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, TaskRepository taskRepository) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     @CacheEvict(value = "categories", allEntries = true)
@@ -50,6 +52,7 @@ public class CategoryService {
         if (category.getOwner()== null || ! category.getOwner().getUsername().equals(username)){
             throw  new AccessDeniedException("You are not authorized to delete this categoryId");
         }
+        taskRepository.detachAllTasksFromCategory(category);
 
         categoryRepository.delete(category);
     }
