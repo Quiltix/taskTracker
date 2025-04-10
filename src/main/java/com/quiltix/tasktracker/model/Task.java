@@ -26,7 +26,6 @@ public class Task {
 
     private String title;
 
-    @Lob
     private String description;
 
     private Boolean important;

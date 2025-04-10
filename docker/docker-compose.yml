@@ -8,6 +8,9 @@ services:
       - "8080:8080"
     environment:
       - DB_URL=jdbc:postgresql://db:5432/taskTracker
+      - APP_AVATAR_DIR=/app/avatars
+    volumes:
+      - avatars_volume:/app/avatars
     depends_on:
       - db
       - redis
@@ -16,7 +19,8 @@ services:
   db:
     image: 'postgres'
     container_name: 'db'
-
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     expose:
       - '5432'
     environment:
@@ -34,4 +38,6 @@ services:
     command: redis-server --appendonly yes
 
 
-
+volumes:  # Объявляем все volumes
+  avatars_volume:
+  postgres_data:
