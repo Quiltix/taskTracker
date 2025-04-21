@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -105,7 +106,6 @@ public class UserService {
 
     @Transactional
     public void updatePasswordWithAuth(Authentication authentication, ResetPasswordWithAuthDTO resetPasswordWithAuthDTO){
-        String username = authentication.getName();
 
         User user = getCurrentUser(authentication);
 
@@ -214,7 +214,7 @@ public class UserService {
             throw new RuntimeException("Error reading file", e);
         }
 
-        String fileName = UUID.randomUUID()+ file.getOriginalFilename()
+        String fileName = UUID.randomUUID()+ Objects.requireNonNull(file.getOriginalFilename())
                                             .substring(file.getOriginalFilename()
                                             .lastIndexOf("."));
 

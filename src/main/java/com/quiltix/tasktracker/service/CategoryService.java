@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Authentication authentication,Long categoryId) {
 
