@@ -9,7 +9,6 @@ import com.quiltix.tasktracker.model.UserRepository;
 import com.quiltix.tasktracker.security.JwtTokenProvider;
 import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

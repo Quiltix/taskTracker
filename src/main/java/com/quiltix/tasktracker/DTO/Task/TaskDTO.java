@@ -3,6 +3,7 @@
 package com.quiltix.tasktracker.DTO.Task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.quiltix.tasktracker.model.Category;
 import com.quiltix.tasktracker.model.StatusEnum;
 import com.quiltix.tasktracker.model.Task;
 
@@ -22,7 +23,7 @@ public class TaskDTO implements Serializable {
     public TaskDTO(Task task) {
         status = task.getStatus();
         important = task.getImportant();
-        categoryId = task.getCategory() != null ? task.getCategory().getId() : null;;
+        categoryId = task.getCategory() != null ? task.getCategory() : null;
         startTime = task.getStartTime();
         timeToComplete = task.getTimeToComplete();
         description = task.getDescription();
@@ -43,7 +44,7 @@ public class TaskDTO implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime startTime;
 
-    private Long categoryId;
+    private Category categoryId;
 
     private boolean important;
 
