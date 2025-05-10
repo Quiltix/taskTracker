@@ -98,7 +98,7 @@ public class TaskController {
 
     }
 
-    @Operation(summary = "Получение таск по категории ")
+    @Operation(summary = "Получение task по категории ")
     @ApiResponse(responseCode = "200", description = "Задачи получены")
     @ApiResponse(responseCode = "400", description = "Нет такой категории")
     @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
@@ -112,7 +112,7 @@ public class TaskController {
 
     }
 
-    @Operation(summary = "Получение таск по статусу ")
+    @Operation(summary = "Получение task по статусу ")
     @ApiResponse(responseCode = "200", description = "Задачи получены")
     @ApiResponse(responseCode = "400", description = "Нет такого статуса")
     @ApiResponse(responseCode = "401", description = "Нет прав на изменение")
@@ -127,7 +127,7 @@ public class TaskController {
     }
 
 
-    @Operation(summary = "Получение важных таск ")
+    @Operation(summary = "Получение важных task ")
     @ApiResponse(responseCode = "200", description = "Задачи получены")
     @ApiResponse(responseCode = "401", description = "Нет прав на получение")
     @ApiResponse(responseCode = "500", description = "Server error")

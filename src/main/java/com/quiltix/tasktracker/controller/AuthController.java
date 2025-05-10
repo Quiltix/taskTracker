@@ -7,7 +7,6 @@ import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
 import com.quiltix.tasktracker.DTO.Auth.ResetPasswordRequestDTO;
 import com.quiltix.tasktracker.DTO.Others.MessageDTO;
 import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
-import com.quiltix.tasktracker.DTO.User.ResetPasswordWithAuthDTO;
 import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.service.RateLimiterService;
 import com.quiltix.tasktracker.service.UserService;
@@ -20,7 +19,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -93,7 +91,7 @@ public class AuthController {
 
     }
 
-    @Operation(summary = "Отправка ресет кода по почте")
+    @Operation(summary = "Отправка reset кода по почте")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")
@@ -111,7 +109,7 @@ public class AuthController {
         return ResponseEntity.ok().body( new MessageDTO("Check your email"));
     }
 
-    @Operation(summary = "Изменение пароля с имеющимся ресет кодом")
+    @Operation(summary = "Изменение пароля с имеющимся reset кодом")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")

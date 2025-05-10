@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO("Email updated successfully"));
     }
 
-    @Operation(summary = "Изменение пароля с токеном (при нахождении авторизированным)")
+    @Operation(summary = "Изменение пароля с JWT (при нахождении авторизированным)")
     @ApiResponse(responseCode = "200", description = "Успешное обновление")
     @ApiResponse(responseCode = "400", description = "Ошибка запроса")
     @ApiResponse(responseCode = "500", description = "Ошибка сервера")

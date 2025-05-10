@@ -1,6 +1,5 @@
 package com.quiltix.tasktracker.DTO.Category;
 
-import com.quiltix.tasktracker.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
