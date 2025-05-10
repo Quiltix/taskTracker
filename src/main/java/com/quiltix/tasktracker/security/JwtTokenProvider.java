@@ -15,11 +15,12 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private final SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512); // Генерируем безопасный ключ
-    private final long jwtExpirationInMs = 86400000; // 1 день
 
     public String generateToken(Authentication authentication) {
         Date now = new Date();
         String username = authentication.getName();
+        // 1 день
+        long jwtExpirationInMs = 86400000;
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()

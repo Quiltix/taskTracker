@@ -1,8 +1,8 @@
 package com.quiltix.tasktracker.service;
 
-import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
-import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
-import com.quiltix.tasktracker.DTO.User.*;
+import com.quiltix.tasktracker.dto.auth.LoginRequestDTO;
+import com.quiltix.tasktracker.dto.auth.RegisterRequestDTO;
+import com.quiltix.tasktracker.dto.user.*;
 import com.quiltix.tasktracker.events.PasswordResetEvent;
 import com.quiltix.tasktracker.model.User;
 import com.quiltix.tasktracker.model.UserRepository;

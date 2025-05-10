@@ -1,7 +1,7 @@
 package com.quiltix.tasktracker.config;
 
 
-import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.dto.others.MessageDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;

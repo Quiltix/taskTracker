@@ -1,4 +1,4 @@
-package com.quiltix.tasktracker.DTO.User;
+package com.quiltix.tasktracker.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

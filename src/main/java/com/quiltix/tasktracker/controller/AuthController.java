@@ -2,12 +2,12 @@ package com.quiltix.tasktracker.controller;
 
 
 
-import com.quiltix.tasktracker.DTO.Auth.JwtAuthenticationResponseDTO;
-import com.quiltix.tasktracker.DTO.Auth.LoginRequestDTO;
-import com.quiltix.tasktracker.DTO.Auth.ResetPasswordRequestDTO;
-import com.quiltix.tasktracker.DTO.Others.MessageDTO;
-import com.quiltix.tasktracker.DTO.Auth.RegisterRequestDTO;
-import com.quiltix.tasktracker.DTO.User.ResetPasswordWithCodeDTO;
+import com.quiltix.tasktracker.dto.auth.JwtAuthenticationResponseDTO;
+import com.quiltix.tasktracker.dto.auth.LoginRequestDTO;
+import com.quiltix.tasktracker.dto.auth.ResetPasswordRequestDTO;
+import com.quiltix.tasktracker.dto.others.MessageDTO;
+import com.quiltix.tasktracker.dto.auth.RegisterRequestDTO;
+import com.quiltix.tasktracker.dto.user.ResetPasswordWithCodeDTO;
 import com.quiltix.tasktracker.service.RateLimiterService;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

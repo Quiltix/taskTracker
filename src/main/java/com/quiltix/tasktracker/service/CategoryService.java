@@ -1,8 +1,8 @@
 package com.quiltix.tasktracker.service;
 
 
-import com.quiltix.tasktracker.DTO.Category.CategoryDTO;
-import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
+import com.quiltix.tasktracker.dto.category.CategoryDTO;
+import com.quiltix.tasktracker.dto.category.CreateCategoryDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;

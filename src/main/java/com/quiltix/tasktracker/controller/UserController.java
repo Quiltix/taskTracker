@@ -1,8 +1,8 @@
 package com.quiltix.tasktracker.controller;
 
 
-import com.quiltix.tasktracker.DTO.Others.MessageDTO;
-import com.quiltix.tasktracker.DTO.User.*;
+import com.quiltix.tasktracker.dto.others.MessageDTO;
+import com.quiltix.tasktracker.dto.user.*;
 import com.quiltix.tasktracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

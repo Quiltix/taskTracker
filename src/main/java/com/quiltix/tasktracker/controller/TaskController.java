@@ -1,9 +1,9 @@
 package com.quiltix.tasktracker.controller;
 
-import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
-import com.quiltix.tasktracker.DTO.Others.MessageDTO;
-import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
-import com.quiltix.tasktracker.DTO.Task.TaskDTO;
+import com.quiltix.tasktracker.dto.task.CreateTaskDTO;
+import com.quiltix.tasktracker.dto.others.MessageDTO;
+import com.quiltix.tasktracker.dto.task.EditTaskDTO;
+import com.quiltix.tasktracker.dto.task.TaskDTO;
 import com.quiltix.tasktracker.model.StatusEnum;
 import com.quiltix.tasktracker.model.Task;
 import com.quiltix.tasktracker.service.TaskService;

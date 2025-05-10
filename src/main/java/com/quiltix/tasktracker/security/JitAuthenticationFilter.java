@@ -13,13 +13,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class JwtAuthentificationFilter extends OncePerRequestFilter {
+public class JitAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
 
 
-    public JwtAuthentificationFilter(JwtTokenProvider tokenProvider, CustomUserDetailsService userDetailsService) {
+    public JitAuthenticationFilter(JwtTokenProvider tokenProvider, CustomUserDetailsService userDetailsService) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
     }

@@ -1,9 +1,9 @@
 package com.quiltix.tasktracker.service;
 
 
-import com.quiltix.tasktracker.DTO.Task.CreateTaskDTO;
-import com.quiltix.tasktracker.DTO.Task.EditTaskDTO;
-import com.quiltix.tasktracker.DTO.Task.TaskDTO;
+import com.quiltix.tasktracker.dto.task.CreateTaskDTO;
+import com.quiltix.tasktracker.dto.task.EditTaskDTO;
+import com.quiltix.tasktracker.dto.task.TaskDTO;
 import com.quiltix.tasktracker.model.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.cache.CacheManager;

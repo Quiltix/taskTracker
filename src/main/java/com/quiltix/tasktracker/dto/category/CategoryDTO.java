@@ -1,4 +1,4 @@
-package com.quiltix.tasktracker.DTO.Category;
+package com.quiltix.tasktracker.dto.category;
 
 
 import com.quiltix.tasktracker.model.Category;

@@ -1,7 +1,6 @@
 package com.quiltix.tasktracker.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;

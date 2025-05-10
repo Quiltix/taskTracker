@@ -1,6 +1,6 @@
 
 
-package com.quiltix.tasktracker.DTO.Task;
+package com.quiltix.tasktracker.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.quiltix.tasktracker.model.Category;

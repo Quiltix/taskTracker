@@ -1,5 +1,6 @@
 
-package com.quiltix.tasktracker.DTO.Auth;
+package com.quiltix.tasktracker.dto.auth;
+
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +10,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRequestDTO {
+
+public class RegisterRequestDTO {
 
     @Size(min = 3, message = "username must be at least 3 characters long")
     @NotBlank(message = "Username cannot be empty")

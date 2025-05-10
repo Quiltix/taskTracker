@@ -1,10 +1,10 @@
 package com.quiltix.tasktracker.controller;
 
 
-import com.quiltix.tasktracker.DTO.Category.CategoryDTO;
-import com.quiltix.tasktracker.DTO.Category.ChangeCategoryDTO;
-import com.quiltix.tasktracker.DTO.Category.CreateCategoryDTO;
-import com.quiltix.tasktracker.DTO.Others.MessageDTO;
+import com.quiltix.tasktracker.dto.category.CategoryDTO;
+import com.quiltix.tasktracker.dto.category.ChangeCategoryDTO;
+import com.quiltix.tasktracker.dto.category.CreateCategoryDTO;
+import com.quiltix.tasktracker.dto.others.MessageDTO;
 import com.quiltix.tasktracker.model.Category;
 import com.quiltix.tasktracker.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
