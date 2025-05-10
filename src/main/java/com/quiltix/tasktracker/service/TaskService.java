@@ -69,11 +69,10 @@ public class TaskService {
 
         Task updatedTask = taskRepository.save(task);
 
-        if (isImportant){
-            if(cacheManager.getCache("importantTasks")!= null){
+        if (isImportant && cacheManager.getCache("importantTasks")!= null){
                 Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
-        }
+
         if (cacheManager.getCache("tasksByStatus") != null){
             Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + StatusEnum.CREATED);
         }
@@ -95,11 +94,10 @@ public class TaskService {
 
         taskRepository.delete(task);
 
-        if (isImportant){
-            if(cacheManager.getCache("importantTasks")!= null){
+        if (isImportant && cacheManager.getCache("importantTasks")!= null){
                 Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
-        }
+
         if (cacheManager.getCache("tasksByStatus") != null){
             Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + status);
         }
@@ -127,11 +125,10 @@ public class TaskService {
             }
             Objects.requireNonNull(cacheManager.getCache("tasksByStatus")).evict(username + ":" + StatusEnum.COMPLETED);
         }
-        if (isImportant){
-            if(cacheManager.getCache("importantTasks")!= null){
+        if (isImportant && cacheManager.getCache("importantTasks")!= null){
                 Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
-        }
+
         return updatedTask;
     }
 
@@ -161,11 +158,10 @@ public class TaskService {
         }
         Task updatedTask = taskRepository.save(task);
 
-        if (Boolean.TRUE.equals(updatedTask.getImportant())) {
-            if (cacheManager.getCache("importantTasks") != null) {
+        if (Boolean.TRUE.equals(updatedTask.getImportant()) && cacheManager.getCache("importantTasks") != null) {
                 Objects.requireNonNull(cacheManager.getCache("importantTasks")).evict(username);
             }
-        }
+
         return updatedTask;
     }
 
@@ -202,7 +198,5 @@ public class TaskService {
                 .map(TaskDTO::new)
                 .toList();
     }
-
-    //
 
 }
