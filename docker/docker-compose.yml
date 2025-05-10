@@ -37,7 +37,21 @@ services:
       - "6379"
     command: redis-server --appendonly yes
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=toxz@ya.ru # Логин для входа
+      - PGADMIN_DEFAULT_PASSWORD=EK:Gjnbwer214gef4T#$       # Пароль для входа
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
 
 volumes:  # Объявляем все volumes
   avatars_volume:
   postgres_data:
+  pgadmin_data:

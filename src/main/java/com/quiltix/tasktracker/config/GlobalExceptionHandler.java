@@ -20,44 +20,48 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex){
+    public ResponseEntity<MessageDTO> handleValidationExceptions(MethodArgumentNotValidException ex){
+        log.error("MethodArgumentNotValidException:{}", String.valueOf(ex));
         return ResponseEntity.badRequest().body(new MessageDTO(Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage()));
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundExceptions(UsernameNotFoundException ex){
+    public ResponseEntity<MessageDTO> handleUserNotFoundExceptions(UsernameNotFoundException ex){
+        log.error("UsernameNotFoundException:{}", String.valueOf(ex));
         return ResponseEntity.badRequest().body(new MessageDTO("User not found"));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<?> handleAccessDeniedExceptions(AccessDeniedException ex){
+    public ResponseEntity<MessageDTO> handleAccessDeniedExceptions(AccessDeniedException ex){
+        log.error("AccessDeniedException:{}", String.valueOf(ex));
         return ResponseEntity.status(401).body(new MessageDTO(ex.getMessage()));
     }
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFoundExceptions(EntityNotFoundException ex){
+    public ResponseEntity<MessageDTO> handleEntityNotFoundExceptions(EntityNotFoundException ex){
         log.error("Entity not found exception:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> IllegalArgumentExceptionExceptions(IllegalArgumentException ex){
+    public ResponseEntity<MessageDTO> handleIllegalArgumentExceptionExceptions(IllegalArgumentException ex){
         log.error("IllegalArgumentExceptionExceptions:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<?> EntityExistsExceptionExceptions(EntityExistsException ex){
+    public ResponseEntity<MessageDTO> handleEntityExistsExceptionExceptions(EntityExistsException ex){
+        log.error("EntityExistsException:{}", String.valueOf(ex));
         return ResponseEntity.badRequest().body(new MessageDTO(ex.getMessage()));
 
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> BadCredentialsExceptionExceptions(BadCredentialsException ex){
+    public ResponseEntity<MessageDTO> handleBadCredentialsExceptionExceptions(BadCredentialsException ex){
         log.error("BadCredentialsExceptionExceptions:{}", String.valueOf(ex));
         return ResponseEntity.status(400).body(new MessageDTO(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAllExceptions(Exception ex) {
+    public ResponseEntity<MessageDTO> handleAllExceptions(Exception ex) {
         log.error("Unhandled exception occurred: ", ex);
         return ResponseEntity.status(500).body(new MessageDTO("Internal server error: " + ex.getMessage()));
     }
